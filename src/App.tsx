@@ -41,7 +41,7 @@ function Layout() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/wedding-website">
       <Layout />
     </BrowserRouter>
   )
