@@ -42,6 +42,11 @@
   gap: 28px;
 }
 
+.hotel-card__meta {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+
 .hotel-card__img-wrap {
   position: relative;
   overflow: hidden;
@@ -85,6 +90,50 @@
 
 .hotel-card__btn { width: 100%; justify-content: center; }
 
+/* ── Booking & Check-In ───────────────────────────────────── */
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.booking-card {
+  padding: 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-card__icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.booking-card h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.booking-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.booking-list {
+  padding-left: 18px;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.booking-list li {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
 /* ── Directions ───────────────────────────────────────────── */
 .directions-grid {
   display: grid;
@@ -118,6 +167,7 @@
 
 @media (max-width: 900px) {
   .hotel-grid { grid-template-columns: 1fr; }
+  .booking-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .travel-intro { grid-template-columns: 1fr; gap: 32px; }

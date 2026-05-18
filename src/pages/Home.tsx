@@ -104,7 +104,7 @@ export default function Home() {
         <div className="container venue-inner">
           <div className="venue-img-wrap">
             <img
-              src="https://images.unsplash.com/photo-1519741347686-c1e331fcde27?w=700&q=80&auto=format&fit=crop"
+              src="https://landollsmohicancastle.com/wp-content/uploads/2024/05/2022_12_03-1.jpg"
               alt="Elegant castle venue at dusk"
               className="venue-img"
               loading="lazy"
@@ -114,7 +114,7 @@ export default function Home() {
             <p className="cinzel">Our Venue</p>
             <h2>{venue}</h2>
             <p className="venue-location">{venueLocation}</p>
-            <div className="ornament" style={{ justifyContent: 'flex-start' }}>✦</div>
+            <div className="ornament">✦</div>
             <p style={{ marginTop: 16 }}>
               Nestled in the rolling hills of Ohio's Mohican country,{' '}
               {venue} is a breathtaking fairytale castle surrounded by

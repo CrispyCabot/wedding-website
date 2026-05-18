@@ -42,6 +42,7 @@ const categories = [
       { q: 'Can I take photos during the ceremony?', a: `We'll have a professional photographer capturing every moment. During the ceremony itself we'd love you to be present — we're planning an "unplugged ceremony" so phones stay away. After the ceremony, snap away! A photo upload link will be shared.` },
       { q: 'What happens if the weather is bad?', a: `The castle has beautiful indoor spaces as a backup for any outdoor portions of the event. We'll communicate any changes via the wedding website and to anyone who RSVPs with an email address.` },
       { q: 'Will there be transportation home?', a: `We want everyone to get home safely! We're exploring shuttle options and will update this page closer to the date. Please plan responsibly and consider booking overnight accommodations at or near the venue if you plan to celebrate fully.` },
+      { q: 'Can I bring my pet?', a: `We kindly ask that guests not bring pets to the castle property. Our dog Mister will be staying with us at the castle, and he is dog-reactive — having other animals around would cause him stress. If you need pet-friendly accommodation, the Loudonville area has B&Bs, cabins, and vacation rentals that welcome pets. We appreciate your understanding!` },
       { q: 'I have a question not answered here — who do I contact?', a: `Please reach out to us directly at [Email TBD] or through a family member listed in the Wedding Party section. We're happy to help!` },
     ],
   },

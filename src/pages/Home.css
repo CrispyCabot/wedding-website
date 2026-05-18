@@ -201,6 +201,7 @@
 .venue-text { padding: 8px 0; }
 .venue-text .cinzel { margin-bottom: 6px; }
 .venue-text h2 { margin-bottom: 4px; }
+.venue-text .ornament { justify-content: flex-start; }
 .venue-location {
   color: var(--text-light);
   font-style: italic;
@@ -283,6 +284,12 @@
   .venue-inner {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+  .venue-text {
+    text-align: center;
+  }
+  .venue-text .ornament {
+    justify-content: center;
   }
   .save-date__info { padding: 24px 20px; gap: 16px; }
   .save-date__divider { display: none; }

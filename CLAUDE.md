@@ -179,6 +179,36 @@ npm run lint      # ESLint
 - For static hosts (Netlify, Vercel, GitHub Pages), add a redirect rule: all `/*` → `/index.html`.
 - All images are currently loaded from Unsplash CDN — no local assets needed beyond the favicon.
 
+### Current deployment: GitHub Pages via GitHub Actions
+
+- **Repo:** `github.com/cbridewell5/wedding-website`
+- **Custom domain:** `chrisbridewell.dev` — configured as a CNAME pointing to `cbridewell5.github.io` (the user-level GitHub Pages apex, not this repo directly)
+- **Effective base path:** `/wedding-website/` — because the custom domain maps to the whole GitHub Pages account, this repo's site lives at the sub-path `/wedding-website/`
+- **Live URL:** `https://chrisbridewell.dev/wedding-website/`
+- Deployments trigger automatically on every push to `main` via `.github/workflows/deploy.yml`
+
+### Changing the domain or base path
+
+**Critical:** three files must stay in sync whenever the domain or base path changes.
+
+| File | What to change |
+|------|---------------|
+| `vite.config.ts` | `base` — must match the sub-path (e.g. `'/wedding-website/'`). Set to `'/'` if the domain maps directly to this repo's root. |
+| `src/App.tsx` | `<BrowserRouter basename="...">` — must match the sub-path without trailing slash (e.g. `"/wedding-website"`). Remove the prop entirely if serving from root. |
+| `public/404.html` | The `slice(0, 2)` in the redirect script keeps the sub-path prefix when bouncing unknown routes back to the app. If serving from root (no sub-path), remove the `l.pathname.split('/').slice(0, 2).join('/')` segment and replace with `''`. |
+| `public/CNAME` | Set to the bare domain (e.g. `chrisbridewell.dev`). GitHub Pages resets the custom domain on every deploy without this file. |
+
+**If moving to a domain that maps directly to this repo root** (e.g. a dedicated `mysite.com` → `cbridewell5.github.io/wedding-website` mapping, or a `username.github.io` repo):
+1. Set `base: '/'` in `vite.config.ts` (or remove the `base` line)
+2. Remove `basename` from `<BrowserRouter>` in `App.tsx`
+3. Simplify `public/404.html` redirect to omit the sub-path prefix
+4. Update `public/CNAME` to the new domain
+
+**If keeping the sub-path structure** but renaming the repo:
+1. Update `base` in `vite.config.ts` to `'/new-repo-name/'`
+2. Update `basename` in `App.tsx` to `"/new-repo-name"`
+3. The `404.html` redirect logic stays the same (it reads the path dynamically)
+
 ---
 
 ## Placeholder Checklist

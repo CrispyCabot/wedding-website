@@ -38,7 +38,7 @@ export default function Footer() {
         </div>
 
         <div className="footer__bottom">
-          <p>Made with love &hearts; for Maddie &amp; Chris</p>
+          <p>Made with love &hearts; by Maddie &amp; Chris</p>
         </div>
       </div>
     </footer>

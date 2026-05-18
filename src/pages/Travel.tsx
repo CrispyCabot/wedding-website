@@ -7,32 +7,57 @@ const hotels = [
   {
     name: "Landoll's Mohican Castle",
     type: 'Venue Hotel',
-    desc: 'Stay right on the property in one of the charming castle suites or romantic cottages nestled in the woods. This is the most magical option and sells out quickly — book early!',
+    desc: "Stay right on the property — we've reserved a block of 31 suites for our wedding night, including charming castle rooms and romantic woodland cottages. This is the most magical option and goes fast, so book early by calling the front desk!",
     price: 'Varies by room type',
     distance: 'On-site',
+    phone: null as string | null,
     url: 'https://www.landollsmohicancastle.com',
     badge: '⭐ Recommended',
     img: 'https://images.unsplash.com/photo-1519741347686-c1e331fcde27?w=500&q=80&auto=format&fit=crop',
   },
   {
-    name: 'The Mohican Resort & Conference Center',
-    type: 'Nearby Hotel',
-    desc: 'A comfortable full-service resort located minutes from the castle, with indoor pool and multiple dining options.',
-    price: 'From ~$120/night',
-    distance: '~5 miles from venue',
-    url: '#',
+    name: 'Serenity Hill',
+    type: 'Vacation Rental',
+    desc: 'A spacious Airbnb just 5 minutes from the castle, perfect for families or groups traveling together. Accommodates up to 10 guests.',
+    price: 'Accommodates 10',
+    distance: '5 min away',
+    phone: null as string | null,
+    url: 'https://www.airbnb.com/rooms/44341387',
+    badge: null,
+    img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&q=80&auto=format&fit=crop',
+  },
+  {
+    name: 'The Hemlock Inn',
+    type: 'Nearby Inn',
+    desc: 'A charming inn just 6 minutes from the castle — a cozy, convenient option for guests who want to be close to the action.',
+    price: null as string | null,
+    distance: '6 min away',
+    phone: '330.227.2628',
+    url: 'https://www.thehemlockinn.com/',
+    badge: null,
+    img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&q=80&auto=format&fit=crop',
+  },
+  {
+    name: 'Mohican State Park Lodge',
+    type: 'Lodge',
+    desc: 'A comfortable lodge set within Mohican State Park, with scenic woodland views and easy access to local trails and dining.',
+    price: null as string | null,
+    distance: '20 min away',
+    phone: '419.938.5411',
+    url: 'https://www.mohicanlodge.com',
     badge: null,
     img: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80&auto=format&fit=crop',
   },
   {
-    name: 'Local B&Bs & Cabins',
-    type: 'Vacation Rentals',
-    desc: 'Loudonville and the surrounding Mohican area have charming bed & breakfasts, rustic cabins, and Airbnb rentals perfect for families and groups.',
-    price: 'Varies',
-    distance: 'Within 10 miles',
-    url: 'https://www.airbnb.com',
+    name: 'The Mount Vernon Grand Hotel',
+    type: 'Hotel',
+    desc: 'A grand full-service hotel in downtown Mount Vernon — a great fallback if closer options have filled up.',
+    price: null as string | null,
+    distance: '30 min away',
+    phone: '844.700.1717',
+    url: 'http://www.mountvernongrand.com',
     badge: null,
-    img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&q=80&auto=format&fit=crop',
   },
 ];
 
@@ -56,6 +81,10 @@ const faqs = [
   {
     q: 'When should I book my hotel?',
     a: 'As soon as possible! Landoll\'s Mohican Castle is a popular venue and rooms on property fill up fast. We recommend booking within 2–4 weeks of receiving your invitation. Most hotels have free cancellation.',
+  },
+  {
+    q: 'Can I bring my pet?',
+    a: 'We kindly ask that guests not bring pets to the castle property. Our dog Mister will be staying with us at the castle, and he is dog-reactive — having other animals on the property could cause him stress. If you need pet-friendly accommodation, the Loudonville area has a number of B&Bs, cabins, and vacation rentals that welcome pets. We appreciate your understanding!',
   },
 ];
 
@@ -112,7 +141,10 @@ export default function Travel() {
           <div className="section-header">
             <p className="cinzel">Where to Stay</p>
             <h2>Accommodations</h2>
-            <p>We've rounded up our favourite places to rest your head near the castle.</p>
+            <p>
+              We've reserved a block of <strong>31 suites</strong> at the castle for our wedding night —
+              book early, as they go fast! If the castle fills up, the options below are all close by.
+            </p>
           </div>
           <div className="hotel-grid">
             {hotels.map(h => (
@@ -127,7 +159,8 @@ export default function Travel() {
                   <p>{h.desc}</p>
                   <div className="hotel-card__meta">
                     <span>🗺 {h.distance}</span>
-                    <span>💰 {h.price}</span>
+                    {h.price && <span>👥 {h.price}</span>}
+                    {h.phone && <span>📞 {h.phone}</span>}
                   </div>
                   <a href={h.url} target="_blank" rel="noreferrer" className="btn btn-soft hotel-card__btn">
                     View Details
@@ -139,8 +172,55 @@ export default function Travel() {
         </div>
       </section>
 
-      {/* Getting here */}
+      {/* Booking & Check-In */}
       <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <p className="cinzel">Need to Know</p>
+            <h2>Booking &amp; Check-In</h2>
+            <p>Important details for reserving and checking into your suite at the castle.</p>
+          </div>
+          <div className="booking-grid">
+            <div className="card booking-card">
+              <span className="booking-card__icon">📞</span>
+              <h3>How to Book a Suite</h3>
+              <p>
+                We've reserved a block of <strong>31 suites</strong> for our wedding night. These <strong>cannot be booked online</strong> — to reserve your room, call the front desk and provide our last name (<strong>Bridewell / Sheets</strong>) along with the wedding date (<strong>September 11, 2027</strong>).
+              </p>
+              <ul className="booking-list">
+                <li><strong>Front desk hours:</strong> 8:30 am – 10:00 pm daily</li>
+                <li>Busiest times are 10–11 am (check-out) and 3–4:30 pm (check-in) — calling outside these windows will get you faster service</li>
+                <li>First night's rate is due at the time of booking</li>
+                <li>Required at booking: name, address, email, phone number, and a card on file</li>
+              </ul>
+            </div>
+            <div className="card booking-card">
+              <span className="booking-card__icon">🏨</span>
+              <h3>Check-In</h3>
+              <p>Check-in for all suites begins at <strong>3:00 PM</strong>. Early check-in is not available.</p>
+              <ul className="booking-list">
+                <li>Guests must be <strong>18 or older</strong> to check in or book a room</li>
+                <li>Valid photo ID is required at check-in</li>
+                <li>The name on the reservation must match your ID — only the named guest may check in</li>
+                <li>We strongly recommend adding your spouse or travel companion's name to the reservation so either person can check in</li>
+              </ul>
+            </div>
+            <div className="card booking-card">
+              <span className="booking-card__icon">👥</span>
+              <h3>Group Reservations</h3>
+              <p>
+                If you're booking multiple suites for a group, please contact the front desk to assign each room to the appropriate guest. This way everyone can check into their own suite directly rather than one person managing all the keys.
+              </p>
+              <p style={{ marginTop: 12 }}>
+                Regardless of who pays for the room, each guest checking in will be asked to put a card on file for their suite.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Getting here */}
+      <section className="section section-alt">
         <div className="container">
           <div className="section-header">
             <p className="cinzel">Directions</p>
@@ -164,7 +244,7 @@ export default function Travel() {
       </section>
 
       {/* Travel FAQs */}
-      <section className="section section-alt">
+      <section className="section">
         <div className="container" style={{ maxWidth: 780 }}>
           <div className="section-header">
             <p className="cinzel">Common Questions</p>
