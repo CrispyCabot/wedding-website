@@ -1,0 +1,126 @@
+/* ── Venue intro ──────────────────────────────────────────── */
+.travel-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.travel-intro__text .cinzel { margin-bottom: 6px; }
+.travel-intro__text h2 { margin-bottom: 4px; }
+
+.travel-intro__location {
+  color: var(--text-light);
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.travel-intro__map {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 340px;
+  position: relative;
+}
+.travel-intro__map-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(46,36,56,0.85), transparent);
+  padding: 20px 20px 18px;
+  color: #fff;
+}
+.travel-intro__map-overlay .cinzel { color: var(--color-gold) !important; font-size: 0.68rem; margin-bottom: 3px; }
+.travel-intro__map-overlay p:last-child { font-size: 0.95rem; }
+
+/* ── Hotel grid ───────────────────────────────────────────── */
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.hotel-card__img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.hotel-card__img-wrap img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.hotel-card:hover .hotel-card__img-wrap img { transform: scale(1.05); }
+
+.hotel-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--color-gold);
+  color: #fff;
+  font-family: var(--font-subheading);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.hotel-card__body {
+  padding: 22px 22px 24px;
+}
+.hotel-card__type { margin-bottom: 4px; }
+.hotel-card__body h3 { margin-bottom: 10px; font-size: 1.15rem; }
+.hotel-card__body p { font-size: 0.9rem; line-height: 1.65; margin-bottom: 14px; }
+
+.hotel-card__meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 18px;
+}
+
+.hotel-card__btn { width: 100%; justify-content: center; }
+
+/* ── Directions ───────────────────────────────────────────── */
+.directions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.directions-card {
+  padding: 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.directions-card__icon { font-size: 1.8rem; line-height: 1; }
+.directions-card h3 { font-size: 1.1rem; }
+.directions-card p { font-size: 0.9rem; }
+
+/* ── Travel FAQs ──────────────────────────────────────────── */
+.travel-faq {
+  padding: 22px 28px;
+  margin-bottom: 16px;
+}
+.travel-faq h4 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--color-mauve-dark);
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+.travel-faq p { font-size: 0.92rem; line-height: 1.7; }
+
+@media (max-width: 900px) {
+  .hotel-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .travel-intro { grid-template-columns: 1fr; gap: 32px; }
+  .directions-grid { grid-template-columns: 1fr; }
+  .travel-intro__map { height: 240px; }
+}

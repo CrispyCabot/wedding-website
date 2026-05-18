@@ -1,0 +1,292 @@
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center 30%;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    170deg,
+    rgba(74,  63,  92, 0.65) 0%,
+    rgba(122, 90, 106, 0.58) 50%,
+    rgba(46,  36,  56, 0.72) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  padding: 40px 24px;
+  max-width: 760px;
+}
+
+.hero__eyebrow {
+  color: rgba(255,255,255,0.7) !important;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+}
+
+.hero__names {
+  font-size: clamp(4rem, 12vw, 9rem);
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 16px;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.25);
+}
+
+.hero__ornament {
+  color: rgba(201,169,110,0.85) !important;
+  font-size: 0.85rem;
+  margin: 12px 0;
+}
+.hero__ornament::before,
+.hero__ornament::after {
+  background: rgba(201,169,110,0.5) !important;
+  max-width: 120px;
+}
+
+.hero__date {
+  color: rgba(255,255,255,0.92) !important;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  margin-bottom: 6px;
+}
+
+.hero__venue {
+  color: rgba(255,255,255,0.70);
+  font-size: 1.05rem;
+  margin-bottom: 40px;
+  font-family: var(--font-heading);
+  font-style: italic;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero__rsvp {
+  position: relative;
+}
+
+.hero__rsvp-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--color-gold);
+  color: #fff;
+  font-size: 0.58rem;
+  font-family: var(--font-subheading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* Scroll indicator */
+.hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.hero__scroll span {
+  display: block;
+  width: 22px;
+  height: 34px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 11px;
+  position: relative;
+}
+.hero__scroll span::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 2px;
+  animation: scrollBounce 1.8s infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  80%       { transform: translateX(-50%) translateY(12px); opacity: 0; }
+}
+
+/* ── Countdown ────────────────────────────────────────────── */
+.countdown-section {
+  background: linear-gradient(135deg, var(--color-lavender-light), var(--bg-page));
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px 32px;
+  min-width: 110px;
+}
+
+.countdown__num {
+  font-family: var(--font-heading);
+  font-size: 3.2rem;
+  font-weight: 300;
+  color: var(--color-mauve-dark);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.countdown__label {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  letter-spacing: 0.15em;
+}
+
+/* ── Venue section ────────────────────────────────────────── */
+.venue-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.venue-img-wrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(74, 63, 92, 0.18);
+  position: relative;
+}
+.venue-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--color-gold);
+  border-radius: calc(var(--radius-lg) + 4px);
+  pointer-events: none;
+}
+
+.venue-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.venue-img-wrap:hover .venue-img { transform: scale(1.03); }
+
+.venue-text { padding: 8px 0; }
+.venue-text .cinzel { margin-bottom: 6px; }
+.venue-text h2 { margin-bottom: 4px; }
+.venue-location {
+  color: var(--text-light);
+  font-style: italic;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+/* ── Preview cards ────────────────────────────────────────── */
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 36px 24px;
+  gap: 10px;
+  transition: transform 0.25s, box-shadow 0.25s;
+  text-decoration: none;
+  color: inherit;
+}
+.preview-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 36px rgba(74, 63, 92, 0.14);
+}
+.preview-card__icon { font-size: 2rem; line-height: 1; margin-bottom: 4px; }
+.preview-card h3 {
+  font-family: var(--font-subheading);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-mauve-dark);
+}
+.preview-card p { font-size: 0.9rem; color: var(--text-light); }
+
+/* ── Save the Date ────────────────────────────────────────── */
+.save-date__heading {
+  font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+  color: var(--color-mauve);
+  font-family: var(--font-script) !important;
+}
+
+.save-date__info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 28px 40px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.save-date__info > div {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+}
+.save-date__info .cinzel {
+  display: block;
+  margin-bottom: 6px;
+}
+.save-date__info p {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+.save-date__divider {
+  width: 1px;
+  height: 52px;
+  background: var(--border);
+  flex: 0;
+  min-width: 1px;
+  margin: 0 12px;
+}
+
+@media (max-width: 768px) {
+  .venue-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .save-date__info { padding: 24px 20px; gap: 16px; }
+  .save-date__divider { display: none; }
+  .save-date__info > div { min-width: 120px; }
+  .countdown__unit { min-width: 80px; padding: 18px 20px; }
+  .countdown__num { font-size: 2.4rem; }
+}

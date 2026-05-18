@@ -1,0 +1,99 @@
+.party-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(74, 63, 92, 0.14);
+}
+
+.member-card__img-wrap {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+.member-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.4s;
+  filter: grayscale(15%);
+}
+.member-card:hover .member-card__img-wrap img {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+.member-card__role {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 12px;
+  background: linear-gradient(to top, rgba(46,36,56,0.80), transparent);
+  color: var(--color-gold) !important;
+  font-size: 0.62rem;
+  text-align: center;
+}
+
+.member-card--bride .member-card__role { background: linear-gradient(to top, rgba(74,36,56,0.80), transparent); }
+.member-card--groom .member-card__role { background: linear-gradient(to top, rgba(36,46,74,0.80), transparent); }
+
+.member-card__body {
+  padding: 18px 18px 20px;
+  flex: 1;
+}
+.member-card__body h3 {
+  font-size: 1rem;
+  margin-bottom: 3px;
+  color: var(--color-mauve-dark);
+}
+.member-card__relation {
+  font-size: 0.8rem;
+  color: var(--text-light) !important;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.member-card__bio {
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+/* Others */
+.others-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.others-card {
+  padding: 24px 24px;
+  text-align: center;
+}
+.others-card__role { margin-bottom: 4px; }
+.others-card__name {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  color: var(--color-mauve-dark);
+}
+.others-card__desc { font-size: 0.85rem; line-height: 1.6; }
+
+@media (max-width: 1024px) {
+  .party-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .others-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .party-grid, .others-grid { grid-template-columns: 1fr; }
+  .member-card__img-wrap { aspect-ratio: 4/3; }
+}

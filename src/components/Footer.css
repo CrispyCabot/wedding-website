@@ -1,0 +1,85 @@
+.footer {
+  background: var(--footer-bg);
+  color: rgba(255,255,255,0.65);
+  padding: 56px 24px 28px;
+  margin-top: auto;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.footer__top {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Brand / monogram */
+.footer__monogram {
+  font-size: 2.8rem;
+  color: var(--color-lavender) !important;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.footer__tagline {
+  color: rgba(255,255,255,0.45) !important;
+  font-size: 0.68rem;
+}
+
+/* Footer nav */
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.footer__nav a {
+  font-family: var(--font-subheading);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  transition: color 0.2s;
+}
+.footer__nav a:hover { color: var(--color-lavender); }
+
+/* Details column */
+.footer__details {
+  text-align: right;
+}
+.footer__details p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+}
+.footer__names {
+  font-family: var(--font-heading);
+  font-size: 1.15rem !important;
+  color: rgba(255,255,255,0.9) !important;
+  margin-bottom: 4px;
+}
+
+/* Bottom bar */
+.footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 20px;
+  text-align: center;
+}
+.footer__bottom p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 768px) {
+  .footer__top {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer__details { text-align: center; }
+  .footer__nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}
