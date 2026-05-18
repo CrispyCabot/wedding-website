@@ -8,6 +8,7 @@
 
 .travel-intro__text .cinzel { margin-bottom: 6px; }
 .travel-intro__text h2 { margin-bottom: 4px; }
+.travel-intro__text .ornament { justify-content: flex-start; }
 
 .travel-intro__location {
   color: var(--text-light);
@@ -171,6 +172,8 @@
 }
 @media (max-width: 768px) {
   .travel-intro { grid-template-columns: 1fr; gap: 32px; }
-  .directions-grid { grid-template-columns: 1fr; }
   .travel-intro__map { height: 240px; }
+  .travel-intro__text { text-align: center; }
+  .travel-intro__text .ornament { justify-content: center; }
+  .travel-intro__text .btn { align-self: center; }
 }

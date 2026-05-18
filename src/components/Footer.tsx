@@ -13,7 +13,7 @@ export default function Footer() {
             <span className="footer__monogram script">
               {partner1.split(' ')[0]} &amp; {partner2.split(' ')[0]}
             </span>
-            <p className="footer__tagline cinzel">Forever Begins {date.split(',')[0].split(' ')[1]}</p>
+            <p className="footer__tagline cinzel">Forever Begins {date}</p>
           </div>
 
           <nav className="footer__nav" aria-label="Footer navigation">
