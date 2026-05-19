@@ -7,6 +7,14 @@
  * All values are injected as CSS custom properties on <html>
  * via applyTheme() called in main.tsx.  Every component and
  * stylesheet consumes var(--…) tokens — nothing is hard-coded.
+ *
+ * Available themes:
+ *   theme        — Lavender · Mauve · Rose Gold (default)
+ *   sageTheme    — Sage Green · Ivory · Dusty Rose
+ *   navyTheme    — Navy · Gold · Ivory
+ *   blushTheme   — Blush · Champagne · Rose
+ *
+ * To switch the active theme, change the re-export at the bottom.
  */
 
 export interface WeddingTheme {
@@ -43,10 +51,10 @@ export interface WeddingTheme {
   };
   /** Font stacks — use any Google Fonts listed in index.html */
   fonts: {
-    heading: string;   // large display headings
+    heading: string;    // large display headings
     subheading: string; // section titles
-    body: string;      // body copy
-    script: string;    // decorative cursive / monogram
+    body: string;       // body copy
+    script: string;     // decorative cursive / monogram
   };
   /** Border-radius tokens */
   radii: {
@@ -54,6 +62,10 @@ export interface WeddingTheme {
     md: string;
     lg: string;
     pill: string;
+  };
+  /** Image URLs used throughout the site */
+  images: {
+    heroBg: string;   // hero section full-viewport background
   };
   /** Couple & event details */
   wedding: {
@@ -69,9 +81,9 @@ export interface WeddingTheme {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  ACTIVE THEME  –  lavender · mauve · rose gold
+//  THEME 1  –  Lavender · Mauve · Rose Gold  (default)
 // ─────────────────────────────────────────────────────────────
-export const theme: WeddingTheme = {
+const lavenderTheme: WeddingTheme = {
   colors: {
     // Lavender
     lavender:       '#C5B8E8',
@@ -126,6 +138,10 @@ export const theme: WeddingTheme = {
     pill: '999px',
   },
 
+  images: {
+    heroBg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80&auto=format&fit=crop',
+  },
+
   wedding: {
     partner1:       'Maddie Sheets',
     partner2:       'Chris Bridewell',
@@ -137,6 +153,234 @@ export const theme: WeddingTheme = {
     registryUrl:    '#registry',   // TODO: replace with real registry link
   },
 };
+
+// ─────────────────────────────────────────────────────────────
+//  THEME 2  –  Sage Green · Ivory · Dusty Rose
+// ─────────────────────────────────────────────────────────────
+export const sageTheme: WeddingTheme = {
+  colors: {
+    // Sage (occupies the lavender token slots)
+    lavender:       '#8FAF7E',
+    lavenderDark:   '#5F7A52',
+    lavenderLight:  '#EAF2E5',
+
+    // Dusty rose (occupies mauve slots)
+    mauve:          '#B07B7B',
+    mauveDark:      '#7A5252',
+    mauveLight:     '#F5E4E4',
+
+    // Terracotta warm (occupies rose gold slots)
+    roseGold:       '#C49080',
+    roseGoldDark:   '#9A6860',
+    roseGoldLight:  '#FAF0EC',
+
+    // Gold
+    gold:           '#C9A96E',
+    goldLight:      '#F4EBD9',
+
+    // Backgrounds
+    bgPage:         '#FDFCF7',
+    bgSection:      '#F5F2EB',
+    bgCard:         '#FFFFFF',
+    bgOverlay:      'rgba(47, 70, 40, 0.58)',
+
+    // Text
+    textPrimary:    '#2F3F28',
+    textSecondary:  '#5A6B52',
+    textLight:      '#8FA882',
+    textInverse:    '#FDFCF7',
+
+    // UI
+    border:         '#D8E4D2',
+    borderLight:    '#EAF0E7',
+    navBg:          'rgba(253, 252, 247, 0.92)',
+    footerBg:       '#1F2E1A',
+    shadow:         '0 4px 24px rgba(47, 70, 40, 0.10)',
+  },
+
+  fonts: {
+    heading:    "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+    subheading: "'Raleway', 'Cinzel', sans-serif",
+    body:       "'Raleway', system-ui, sans-serif",
+    script:     "'Dancing Script', 'Great Vibes', cursive",
+  },
+
+  radii: {
+    sm:   '4px',
+    md:   '12px',
+    lg:   '24px',
+    pill: '999px',
+  },
+
+  images: {
+    heroBg: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop',
+  },
+
+  wedding: {
+    partner1:       'Maddie Sheets',
+    partner2:       'Chris Bridewell',
+    date:           'September 11, 2027',
+    dateISO:        '2027-09-11T16:00:00',
+    venue:          "Landoll's Mohican Castle",
+    venueLocation:  'Loudonville, Ohio',
+    rsvpUrl:        '#rsvp',
+    registryUrl:    '#registry',
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
+//  THEME 3  –  Navy · Gold · Ivory
+// ─────────────────────────────────────────────────────────────
+export const navyTheme: WeddingTheme = {
+  colors: {
+    // Steel blue (occupies lavender slots)
+    lavender:       '#4A6FA5',
+    lavenderDark:   '#1B3566',
+    lavenderLight:  '#D6E4F0',
+
+    // Warm gold-brown (occupies mauve slots)
+    mauve:          '#B5976C',
+    mauveDark:      '#8A6B3E',
+    mauveLight:     '#F4EDDF',
+
+    // Gold (occupies rose gold slots)
+    roseGold:       '#C9A96E',
+    roseGoldDark:   '#9E7D44',
+    roseGoldLight:  '#F8F0E3',
+
+    // Gold
+    gold:           '#C9A96E',
+    goldLight:      '#F9F1DF',
+
+    // Backgrounds
+    bgPage:         '#FFFEF5',
+    bgSection:      '#F5F2E8',
+    bgCard:         '#FFFFFF',
+    bgOverlay:      'rgba(27, 53, 102, 0.65)',
+
+    // Text
+    textPrimary:    '#1B3566',
+    textSecondary:  '#4A5D7A',
+    textLight:      '#8A9AB5',
+    textInverse:    '#FFFEF5',
+
+    // UI
+    border:         '#D5DDE8',
+    borderLight:    '#EBF0F7',
+    navBg:          'rgba(255, 254, 245, 0.92)',
+    footerBg:       '#0D1D3A',
+    shadow:         '0 4px 24px rgba(27, 53, 102, 0.10)',
+  },
+
+  fonts: {
+    heading:    "'Libre Baskerville', 'Cormorant Garamond', Georgia, serif",
+    subheading: "'Josefin Sans', 'Cinzel', sans-serif",
+    body:       "'Source Sans 3', 'Lato', system-ui, sans-serif",
+    script:     "'Alex Brush', 'Great Vibes', cursive",
+  },
+
+  radii: {
+    sm:   '2px',
+    md:   '6px',
+    lg:   '12px',
+    pill: '999px',
+  },
+
+  images: {
+    heroBg: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600&q=80&auto=format&fit=crop',
+  },
+
+  wedding: {
+    partner1:       'Maddie Sheets',
+    partner2:       'Chris Bridewell',
+    date:           'September 11, 2027',
+    dateISO:        '2027-09-11T16:00:00',
+    venue:          "Landoll's Mohican Castle",
+    venueLocation:  'Loudonville, Ohio',
+    rsvpUrl:        '#rsvp',
+    registryUrl:    '#registry',
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
+//  THEME 4  –  Blush · Champagne · Rose
+// ─────────────────────────────────────────────────────────────
+export const blushTheme: WeddingTheme = {
+  colors: {
+    // Blush (occupies lavender slots)
+    lavender:       '#F2B5C0',
+    lavenderDark:   '#D4788C',
+    lavenderLight:  '#FDE8ED',
+
+    // Dusty rose (occupies mauve slots)
+    mauve:          '#C98B99',
+    mauveDark:      '#A0637A',
+    mauveLight:     '#FAEAEE',
+
+    // Champagne (occupies rose gold slots)
+    roseGold:       '#D4A574',
+    roseGoldDark:   '#A87A4A',
+    roseGoldLight:  '#FAF0E6',
+
+    // Gold
+    gold:           '#C9A96E',
+    goldLight:      '#F4EBD9',
+
+    // Backgrounds
+    bgPage:         '#FFF9FA',
+    bgSection:      '#FDF0F3',
+    bgCard:         '#FFFFFF',
+    bgOverlay:      'rgba(160, 80, 100, 0.55)',
+
+    // Text
+    textPrimary:    '#5A3040',
+    textSecondary:  '#8A5A6A',
+    textLight:      '#C49AB0',
+    textInverse:    '#FFF9FA',
+
+    // UI
+    border:         '#F0D8DF',
+    borderLight:    '#FAF0F4',
+    navBg:          'rgba(255, 249, 250, 0.92)',
+    footerBg:       '#3A1D28',
+    shadow:         '0 4px 24px rgba(90, 48, 64, 0.10)',
+  },
+
+  fonts: {
+    heading:    "'Bodoni Moda', 'Cormorant Garamond', Georgia, serif",
+    subheading: "'Montserrat', 'Cinzel', sans-serif",
+    body:       "'Open Sans', 'Lato', system-ui, sans-serif",
+    script:     "'Parisienne', 'Great Vibes', cursive",
+  },
+
+  radii: {
+    sm:   '6px',
+    md:   '14px',
+    lg:   '28px',
+    pill: '999px',
+  },
+
+  images: {
+    heroBg: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1600&q=80&auto=format&fit=crop',
+  },
+
+  wedding: {
+    partner1:       'Maddie Sheets',
+    partner2:       'Chris Bridewell',
+    date:           'September 11, 2027',
+    dateISO:        '2027-09-11T16:00:00',
+    venue:          "Landoll's Mohican Castle",
+    venueLocation:  'Loudonville, Ohio',
+    rsvpUrl:        '#rsvp',
+    registryUrl:    '#registry',
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
+//  ACTIVE THEME  –  change this export to switch themes
+//    Options: lavenderTheme | sageTheme | navyTheme | blushTheme
+// ─────────────────────────────────────────────────────────────
+export const theme: WeddingTheme = blushTheme;
 
 // ─────────────────────────────────────────────────────────────
 //  Apply theme → CSS custom properties on <html>
@@ -185,4 +429,7 @@ export function applyTheme(t: WeddingTheme = theme): void {
   s('--radius-md',             t.radii.md);
   s('--radius-lg',             t.radii.lg);
   s('--radius-pill',           t.radii.pill);
+
+  // Images
+  s('--image-hero-bg', `url('${t.images.heroBg}')`);
 }
