@@ -392,7 +392,7 @@ export function triggerHeartSpell(into: FallingHeart[], w: number) {
       x:         Math.random() * w,
       y:         -30 - Math.random() * 300,
       size:      18 + Math.random() * 28,
-      speed:     1.4 + Math.random() * 2.2,
+      speed:     2.0 + Math.random() * 3.0,
       sway:      0.6 + Math.random() * 1.0,
       swayPhase: Math.random() * Math.PI * 2,
       rot:       (Math.random() - 0.5) * 0.5,
@@ -414,7 +414,7 @@ export function triggerStarSpell(into: FallingHeart[], w: number) {
       x:         Math.random() * w,
       y:         -30 - Math.random() * 300,
       size:      20 + Math.random() * 30,
-      speed:     1.2 + Math.random() * 2.0,
+      speed:     1.8 + Math.random() * 2.8,
       sway:      0.5 + Math.random() * 0.8,
       swayPhase: Math.random() * Math.PI * 2,
       rot:       (Math.random() - 0.5) * 0.6,
@@ -433,7 +433,7 @@ export function triggerCircleSpell(into: BurstEmoji[], cx: number, cy: number) {
   const count = 45 + Math.floor(Math.random() * 15)
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2
-    const speed = 1.0 + Math.random() * 2.2
+    const speed = 1.75 + Math.random() * 3.35
     into.push({
       x:       cx,
       y:       cy,
@@ -444,8 +444,8 @@ export function triggerCircleSpell(into: BurstEmoji[], cx: number, cy: number) {
       rot:     Math.random() * Math.PI * 2,
       rotV:    (Math.random() - 0.5) * 0.18,
       opacity: 0.9 + Math.random() * 0.1,
-      decay:   0.003 + Math.random() * 0.004,
-      gravity: 0.03 + Math.random() * 0.02,
+      decay:   0.0055 + Math.random() * 0.007,
+      gravity: 0.065 + Math.random() * 0.04,
     })
   }
 }
@@ -461,14 +461,14 @@ export function triggerInfinitySpell(into: BurstEmoji[], w: number, h: number) {
       x:       Math.random() * w,
       y:       h * 0.7 + Math.random() * h * 0.35,
       vx:      (Math.random() - 0.5) * 1.2,
-      vy:      -(0.5 + Math.random() * 1.0),
+      vy:      -(0.85 + Math.random() * 1.5),
       size:    22 + Math.random() * 26,
       emoji:   RING_EMOJIS[Math.floor(Math.random() * RING_EMOJIS.length)],
       rot:     (Math.random() - 0.5) * 0.4,
       rotV:    (Math.random() - 0.5) * 0.02,
       opacity: 0.85 + Math.random() * 0.15,
-      decay:   0.002 + Math.random() * 0.003,
-      gravity: 0.002,
+      decay:   0.003 + Math.random() * 0.004,
+      gravity: 0.0035,
     })
   }
 }
