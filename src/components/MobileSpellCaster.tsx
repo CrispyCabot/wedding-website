@@ -134,7 +134,7 @@ export default function MobileSpellCaster() {
         onClick={() => setActive(a => !a)}
         aria-label={active ? 'Exit spell mode' : 'Enter spell drawing mode'}
       >
-        {active ? '← Back' : '✨ Spell'}
+        {active ? '← Back' : 'Cast A Spell ✨'}
       </button>
 
       {/* Drawing canvas — full-screen overlay, only when active */}
