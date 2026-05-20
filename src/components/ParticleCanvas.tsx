@@ -76,7 +76,6 @@ function drawSparkle(ctx: CanvasRenderingContext2D, p: Particle) {
   ctx.translate(x, y)
   ctx.rotate(p.rot)
 
-  // 4-pointed star
   const outer = size
   const inner = size * 0.22
   ctx.beginPath()
@@ -90,7 +89,6 @@ function drawSparkle(ctx: CanvasRenderingContext2D, p: Particle) {
   ctx.fillStyle = color
   ctx.fill()
 
-  // soft glow halo
   const grd = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2.2)
   grd.addColorStop(0, color + '55')
   grd.addColorStop(1, color + '00')
@@ -114,7 +112,6 @@ function drawPetal(ctx: CanvasRenderingContext2D, p: Particle) {
   ctx.ellipse(0, 0, size * 0.42, size, 0, 0, Math.PI * 2)
   ctx.fill()
 
-  // subtle highlight
   ctx.globalAlpha = opacity * 0.25
   ctx.fillStyle = '#ffffff'
   ctx.beginPath()
@@ -149,8 +146,8 @@ export default function ParticleCanvas() {
     const ctx = canvas.getContext('2d')!
     const { count, colors } = theme.particles
 
-    let w = window.innerWidth
-    let h = window.innerHeight
+    let w = canvas.offsetWidth || window.innerWidth
+    let h = canvas.offsetHeight || window.innerHeight
     canvas.width  = w
     canvas.height = h
 
@@ -169,31 +166,27 @@ export default function ParticleCanvas() {
       ctx.clearRect(0, 0, w, h)
 
       for (const p of particles) {
-        // Drift movement
         p.x  += p.vx + Math.sin(p.oscPhase) * p.oscAmp * 0.012
         p.y  += p.vy
         p.rot += p.rotV
         p.oscPhase     += p.oscSpeed
         p.twinklePhase += p.twinkleSpeed
 
-        // Twinkle: modulate opacity around the target
         const twinkle = p.type === 'sparkle'
           ? 0.25 * Math.sin(p.twinklePhase)
           : 0.08 * Math.sin(p.twinklePhase)
         p.opacity = Math.max(0, (p.targetOpacity + twinkle) * globalFade)
 
-        // Wrap / respawn at edges
         if (p.type === 'petal') {
-          if (p.y > h + p.size)  { Object.assign(p, makeParticle(w, h, colors, false)); p.y = -p.size }
-          if (p.x < -p.size * 2) p.x = w + p.size
+          if (p.y > h + p.size)    { Object.assign(p, makeParticle(w, h, colors, false)); p.y = -p.size }
+          if (p.x < -p.size * 2)  p.x = w + p.size
           if (p.x > w + p.size * 2) p.x = -p.size
         } else {
-          if (p.y < -p.size * 3) { Object.assign(p, makeParticle(w, h, colors, false)); p.y = h + p.size }
-          if (p.x < -p.size * 2) p.x = w + p.size
+          if (p.y < -p.size * 3)   { Object.assign(p, makeParticle(w, h, colors, false)); p.y = h + p.size }
+          if (p.x < -p.size * 2)  p.x = w + p.size
           if (p.x > w + p.size * 2) p.x = -p.size
         }
 
-        // Draw
         if      (p.type === 'sparkle') drawSparkle(ctx, p)
         else if (p.type === 'petal')   drawPetal(ctx, p)
         else                           drawOrb(ctx, p)
@@ -204,17 +197,17 @@ export default function ParticleCanvas() {
 
     rafId = requestAnimationFrame(tick)
 
-    function onResize() {
-      w = window.innerWidth
-      h = window.innerHeight
+    const ro = new ResizeObserver(() => {
+      w = canvas.offsetWidth
+      h = canvas.offsetHeight
       canvas.width  = w
       canvas.height = h
-    }
-    window.addEventListener('resize', onResize)
+    })
+    ro.observe(canvas)
 
     return () => {
       cancelAnimationFrame(rafId)
-      window.removeEventListener('resize', onResize)
+      ro.disconnect()
     }
   }, [])
 
@@ -224,12 +217,12 @@ export default function ParticleCanvas() {
     <canvas
       ref={canvasRef}
       style={{
-        position: 'fixed',
+        position: 'absolute',
         inset: 0,
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        zIndex: 5,
+        zIndex: 0,
       }}
       aria-hidden="true"
     />

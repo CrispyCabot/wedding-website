@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { theme } from '../config/theme';
+import ParticleCanvas from '../components/ParticleCanvas';
 import './Home.css';
 
 /* ── Countdown helper ─────────────────────────────────────── */
@@ -41,6 +42,7 @@ export default function Home() {
       {/* ── HERO ────────────────────────────────────────────── */}
       <section className="hero">
         <div className="hero__overlay" />
+        <ParticleCanvas />
         <div className="hero__content fade-up">
           <p className="cinzel hero__eyebrow">We're getting married</p>
 

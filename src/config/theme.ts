@@ -150,7 +150,7 @@ export const lavenderTheme: WeddingTheme = {
 
   particles: {
     enabled: true,
-    count: 65,
+    count: 120,
     colors: ['#C5B8E8', '#9B8EC4', '#A67C8A', '#C9A96E', '#EDD5DC'],
   },
 
@@ -230,7 +230,7 @@ export const sageTheme: WeddingTheme = {
 
   particles: {
     enabled: true,
-    count: 65,
+    count: 120,
     colors: ['#8FAF7E', '#5F7A52', '#B07B7B', '#C9A96E', '#EAF2E5'],
   },
 
@@ -310,7 +310,7 @@ export const navyTheme: WeddingTheme = {
 
   particles: {
     enabled: true,
-    count: 65,
+    count: 120,
     colors: ['#4A6FA5', '#C9A96E', '#B5976C', '#D6E4F0', '#8A9AB5'],
   },
 
@@ -390,7 +390,7 @@ export const blushTheme: WeddingTheme = {
 
   particles: {
     enabled: true,
-    count: 65,
+    count: 120,
     colors: ['#F2B5C0', '#C98B99', '#D4A574', '#C9A96E', '#D4788C'],
   },
 

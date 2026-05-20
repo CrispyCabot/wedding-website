@@ -1,6 +1,7 @@
 /* ── Hero ─────────────────────────────────────────────────── */
 .hero {
   position: relative;
+  overflow: hidden;
   min-height: 100dvh;
   display: flex;
   align-items: center;
