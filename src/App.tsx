@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import ParticleCanvas from './components/ParticleCanvas'
 import Home from './pages/Home'
 import OurStory from './pages/OurStory'
 import Photos from './pages/Photos'
@@ -21,6 +22,7 @@ function ScrollToTop() {
 function Layout() {
   return (
     <>
+      <ParticleCanvas />
       <ScrollToTop />
       <Nav />
       <Routes>

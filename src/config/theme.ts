@@ -67,6 +67,12 @@ export interface WeddingTheme {
   images: {
     heroBg: string;   // hero section full-viewport background
   };
+  /** Particle effect configuration */
+  particles: {
+    enabled: boolean;
+    count: number;      // total number of particles on screen
+    colors: string[];   // hex color values for particles
+  };
   /** Couple & event details */
   wedding: {
     partner1: string;
@@ -83,7 +89,7 @@ export interface WeddingTheme {
 // ─────────────────────────────────────────────────────────────
 //  THEME 1  –  Lavender · Mauve · Rose Gold  (default)
 // ─────────────────────────────────────────────────────────────
-const lavenderTheme: WeddingTheme = {
+export const lavenderTheme: WeddingTheme = {
   colors: {
     // Lavender
     lavender:       '#C5B8E8',
@@ -140,6 +146,12 @@ const lavenderTheme: WeddingTheme = {
 
   images: {
     heroBg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80&auto=format&fit=crop',
+  },
+
+  particles: {
+    enabled: true,
+    count: 65,
+    colors: ['#C5B8E8', '#9B8EC4', '#A67C8A', '#C9A96E', '#EDD5DC'],
   },
 
   wedding: {
@@ -216,6 +228,12 @@ export const sageTheme: WeddingTheme = {
     heroBg: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop',
   },
 
+  particles: {
+    enabled: true,
+    count: 65,
+    colors: ['#8FAF7E', '#5F7A52', '#B07B7B', '#C9A96E', '#EAF2E5'],
+  },
+
   wedding: {
     partner1:       'Maddie Sheets',
     partner2:       'Chris Bridewell',
@@ -290,6 +308,12 @@ export const navyTheme: WeddingTheme = {
     heroBg: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600&q=80&auto=format&fit=crop',
   },
 
+  particles: {
+    enabled: true,
+    count: 65,
+    colors: ['#4A6FA5', '#C9A96E', '#B5976C', '#D6E4F0', '#8A9AB5'],
+  },
+
   wedding: {
     partner1:       'Maddie Sheets',
     partner2:       'Chris Bridewell',
@@ -362,6 +386,12 @@ export const blushTheme: WeddingTheme = {
 
   images: {
     heroBg: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1600&q=80&auto=format&fit=crop',
+  },
+
+  particles: {
+    enabled: true,
+    count: 65,
+    colors: ['#F2B5C0', '#C98B99', '#D4A574', '#C9A96E', '#D4788C'],
   },
 
   wedding: {
