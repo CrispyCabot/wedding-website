@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import FairyWandCursor from './components/FairyWandCursor'
+import MobileSpellCaster from './components/MobileSpellCaster'
 import Home from './pages/Home'
 import OurStory from './pages/OurStory'
 import Photos from './pages/Photos'
@@ -44,6 +45,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <FairyWandCursor />
+      <MobileSpellCaster />
       <Layout />
     </BrowserRouter>
   )

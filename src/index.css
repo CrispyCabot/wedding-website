@@ -243,6 +243,39 @@ img { display: block; max-width: 100%; }
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
 }
 
+/* ── Mobile spell button (touch devices only) ────────────── */
+.mobile-spell-btn {
+  display: none; /* shown only on pointer:coarse below */
+  position: fixed;
+  top: 80px; /* sits just below the 68 px nav bar */
+  right: 16px;
+  z-index: 150;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-subheading);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.mobile-spell-btn--back {
+  background: rgba(0, 0, 0, 0.32);
+  border-color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Only reveal on touch/coarse-pointer devices (phones, tablets) */
+@media (pointer: coarse) {
+  .mobile-spell-btn { display: block; }
+}
+
 /* ── Scroll-fade-in animation ─────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
