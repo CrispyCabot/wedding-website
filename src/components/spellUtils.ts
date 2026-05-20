@@ -198,6 +198,74 @@ export function detectHeart(raw: Point[]): boolean {
   return true
 }
 
+// ── Star detection ───────────────────────────────────────────
+
+function sampleEvenly(pts: Point[], n: number): Point[] {
+  if (pts.length <= n) return pts
+  return Array.from({ length: n }, (_, i) =>
+    pts[Math.round((i / (n - 1)) * (pts.length - 1))]
+  )
+}
+
+export function detectStar(raw: Point[]): boolean {
+  if (raw.length < MIN_STROKE_PTS) return false
+
+  const xs = raw.map(p => p.x), ys = raw.map(p => p.y)
+  const minX = Math.min(...xs), maxX = Math.max(...xs)
+  const minY = Math.min(...ys), maxY = Math.max(...ys)
+  const W = maxX - minX, H = maxY - minY
+
+  if (W < MIN_BBOX_PX || H < MIN_BBOX_PX) return false
+
+  const ratio = W / H
+  if (ratio < 0.5 || ratio > 2.0) return false
+
+  // Normalise to [0,1]
+  const pts = raw.map(p => ({ x: (p.x - minX) / W, y: (p.y - minY) / H }))
+
+  // Closure: first and last point must be reasonably close
+  const dx = pts[0].x - pts[pts.length - 1].x
+  const dy = pts[0].y - pts[pts.length - 1].y
+  if (Math.sqrt(dx * dx + dy * dy) > 0.52) return false
+
+  // Centroid
+  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length
+  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length
+
+  // Distance of each point from centroid
+  const dists = pts.map(p => Math.sqrt((p.x - cx) ** 2 + (p.y - cy) ** 2))
+  const maxDist = Math.max(...dists)
+  if (maxDist < 0.28) return false   // star must reach reasonably far from centre
+
+  // "Tip" points (distance > 58 % of max) must cover at least 4 of 5 angular sectors
+  const tipThreshold = maxDist * 0.58
+  const tipAngles = pts
+    .filter((_, i) => dists[i] > tipThreshold)
+    .map(p => {
+      const a = Math.atan2(p.y - cy, p.x - cx) * (180 / Math.PI)
+      return a < 0 ? a + 360 : a
+    })
+  const occupiedSectors = new Set(tipAngles.map(a => Math.floor(a / 72)))
+  if (occupiedSectors.size < 4) return false
+
+  // Count sharp direction reversals (> 90°) in a sampled subset
+  // A 5-pointed star drawn as a single stroke produces ~5 inner-corner reversals
+  const sampled = sampleEvenly(pts, 44)
+  let sharpTurns = 0
+  for (let i = 1; i < sampled.length - 1; i++) {
+    const dx1 = sampled[i].x - sampled[i-1].x, dy1 = sampled[i].y - sampled[i-1].y
+    const dx2 = sampled[i+1].x - sampled[i].x, dy2 = sampled[i+1].y - sampled[i].y
+    const l1 = Math.sqrt(dx1*dx1 + dy1*dy1), l2 = Math.sqrt(dx2*dx2 + dy2*dy2)
+    if (l1 < 0.005 || l2 < 0.005) continue
+    const dot = (dx1*dx2 + dy1*dy2) / (l1 * l2)
+    const angle = Math.acos(Math.max(-1, Math.min(1, dot))) * 180 / Math.PI
+    if (angle > 90) sharpTurns++
+  }
+  if (sharpTurns < 3 || sharpTurns > 14) return false
+
+  return true
+}
+
 // ── Heart emoji rain ──────────────────────────────────────────
 
 const HEART_EMOJIS = ['❤️', '💕', '💗', '💓', '💖', '💝', '🩷', '💞']
@@ -216,6 +284,28 @@ export function triggerHeartSpell(into: FallingHeart[], w: number) {
       rotV:      (Math.random() - 0.5) * 0.03,
       opacity:   0.75 + Math.random() * 0.25,
       emoji:     HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)],
+    })
+  }
+}
+
+// ── Star / sparkle emoji rain ─────────────────────────────────
+
+const STAR_EMOJIS = ['⭐', '🌟', '✨', '💫', '🌠', '✨', '⭐', '🌟', '💥', '🔮']
+
+export function triggerStarSpell(into: FallingHeart[], w: number) {
+  const count = 35 + Math.floor(Math.random() * 20)
+  for (let i = 0; i < count; i++) {
+    into.push({
+      x:         Math.random() * w,
+      y:         -30 - Math.random() * 300,
+      size:      20 + Math.random() * 30,
+      speed:     1.2 + Math.random() * 2.0,
+      sway:      0.5 + Math.random() * 0.8,
+      swayPhase: Math.random() * Math.PI * 2,
+      rot:       (Math.random() - 0.5) * 0.6,
+      rotV:      (Math.random() - 0.5) * 0.04,
+      opacity:   0.78 + Math.random() * 0.22,
+      emoji:     STAR_EMOJIS[Math.floor(Math.random() * STAR_EMOJIS.length)],
     })
   }
 }

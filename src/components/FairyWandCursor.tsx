@@ -5,6 +5,7 @@ import {
   drawTrailStar, drawTrailOrb,
   spawnTrailParticles, drawSparkleStroke,
   detectHeart, triggerHeartSpell,
+  detectStar, triggerStarSpell,
   tickTrail, tickHearts,
 } from './spellUtils'
 
@@ -68,12 +69,20 @@ export default function FairyWandCursor() {
       const pts = strokePts.current.slice()
       strokePts.current = []
 
+      // console.log('[spell] stroke points:', JSON.stringify(pts))
+
+      const xs = pts.map(p => p.x), ys = pts.map(p => p.y)
+      const cx = (Math.min(...xs) + Math.max(...xs)) / 2
+      const cy = (Math.min(...ys) + Math.max(...ys)) / 2
+
       if (detectHeart(pts)) {
-        const xs = pts.map(p => p.x), ys = pts.map(p => p.y)
-        const cx = (Math.min(...xs) + Math.max(...xs)) / 2
-        const cy = (Math.min(...ys) + Math.max(...ys)) / 2
         for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
         triggerHeartSpell(hearts.current, w)
+        fadingPts.current = []
+        fadeAlpha.current = 0
+      } else if (detectStar(pts)) {
+        for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
+        triggerStarSpell(hearts.current, w)
         fadingPts.current = []
         fadeAlpha.current = 0
       } else {
