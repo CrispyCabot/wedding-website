@@ -410,7 +410,7 @@ export const blushTheme: WeddingTheme = {
 //  ACTIVE THEME  –  change this export to switch themes
 //    Options: lavenderTheme | sageTheme | navyTheme | blushTheme
 // ─────────────────────────────────────────────────────────────
-export const theme: WeddingTheme = blushTheme;
+export const theme: WeddingTheme = navyTheme;
 
 // ─────────────────────────────────────────────────────────────
 //  Apply theme → CSS custom properties on <html>

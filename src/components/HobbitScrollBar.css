@@ -1,0 +1,251 @@
+/* ── Hide native scrollbar ─────────────────────────────────── */
+html {
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  padding-bottom: 64px;
+}
+
+/* ── Bar container — fully transparent ─────────────────────── */
+.hobbit-scrollbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 999;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── The road line ──────────────────────────────────────────── */
+.hobbit-road-line {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(120, 100, 160, 0.25) 4%,
+    rgba(120, 100, 160, 0.5) 15%,
+    rgba(100, 80, 140, 0.55) 50%,
+    rgba(180, 80, 40, 0.55) 75%,
+    rgba(200, 60, 0, 0.65) 90%,
+    rgba(220, 40, 0, 0.8) 100%
+  );
+}
+
+/* ── Milestone markers ──────────────────────────────────────── */
+.milestone {
+  position: absolute;
+  bottom: 14px;   /* sits on the line */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.milestone-label {
+  font-family: var(--font-subheading, 'Cinzel', serif);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  color: rgba(80, 60, 100, 0.65);
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+.milestone-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(100, 75, 140, 0.5);
+  box-shadow: 0 0 0 2px rgba(100, 75, 140, 0.15);
+  margin-top: 1px;
+}
+
+@media (max-width: 480px) {
+  .milestone-label { display: none; }
+}
+
+/* ── Couple walker ──────────────────────────────────────────── */
+.hobbit-walker {
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  transition: left 0.07s linear;
+  z-index: 3;
+}
+
+.couple-figure {
+  fill: rgba(55, 40, 75, 0.78);
+  stroke: rgba(55, 40, 75, 0.78);
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.groom-figure {
+  width: 26px;
+  height: 50px;
+}
+
+.bride-figure {
+  width: 30px;
+  height: 50px;
+}
+
+/* ── Limb animation setup ───────────────────────────────────── */
+.leg-front,
+.leg-back,
+.arm-front {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+
+/* Idle: standing still */
+.is-idle .traveler-figure {
+  animation: traveler-breathe 3.5s ease-in-out infinite;
+}
+.is-idle .leg-front { transform: rotate(-8deg); }
+.is-idle .leg-back  { transform: rotate(8deg); }
+.is-idle .arm-front { transform: rotate(5deg); }
+
+/* Walking: swinging legs + body bob */
+.is-walking .traveler-figure {
+  animation: traveler-bob 0.44s ease-in-out infinite;
+}
+.is-walking .leg-front {
+  animation: swing-leg-fwd 0.44s ease-in-out infinite alternate;
+}
+.is-walking .leg-back {
+  animation: swing-leg-back 0.44s ease-in-out infinite alternate;
+}
+.is-walking .arm-front {
+  animation: swing-arm 0.44s ease-in-out infinite alternate;
+}
+
+@keyframes traveler-breathe {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-1px); }
+}
+@keyframes traveler-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+@keyframes swing-leg-fwd {
+  from { transform: rotate(-22deg); }
+  to   { transform: rotate(14deg); }
+}
+@keyframes swing-leg-back {
+  from { transform: rotate(14deg); }
+  to   { transform: rotate(-22deg); }
+}
+@keyframes swing-arm {
+  from { transform: rotate(-10deg); }
+  to   { transform: rotate(10deg); }
+}
+
+/* ── Eye of Sauron ──────────────────────────────────────────── */
+.eye-container {
+  position: absolute;
+  right: 4px;
+  bottom: 0;
+  width: 56px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.eye-sauron {
+  width: 56px;
+  height: 68px;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 80, 0, 0.7))
+    drop-shadow(0 0 14px rgba(255, 40, 0, 0.35));
+}
+
+.eye-label {
+  font-family: var(--font-subheading, 'Cinzel', serif);
+  font-size: 0.4rem;
+  color: rgba(220, 100, 0, 0.7);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  text-shadow: 0 0 6px rgba(255, 68, 0, 0.8);
+}
+
+/* ── Eye SVG animations ─────────────────────────────────────── */
+.eye-glow-outer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: eye-pulse 2.6s ease-in-out infinite;
+}
+.flame-layer-1 {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flame-a 1.3s ease-in-out infinite alternate;
+}
+.flame-layer-2 {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flame-b 0.9s ease-in-out infinite alternate;
+}
+.flame-layer-3 {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flame-c 0.7s ease-in-out infinite alternate;
+}
+.flame-layer-4 {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flame-d 0.52s ease-in-out infinite alternate;
+}
+
+@keyframes eye-pulse {
+  0%, 100% { opacity: 0;    transform: scale(0.88); }
+  50%       { opacity: 0.28; transform: scale(1.14); }
+}
+@keyframes flame-a {
+  from { transform: scaleY(1)    skewX(-1deg); }
+  to   { transform: scaleY(1.09) skewX(1deg);  }
+}
+@keyframes flame-b {
+  from { transform: scaleY(0.95) skewX(2deg);  }
+  to   { transform: scaleY(1.07) skewX(-2deg); }
+}
+@keyframes flame-c {
+  from { transform: scaleY(1.04) skewX(-3deg); }
+  to   { transform: scaleY(0.93) skewX(3deg);  }
+}
+@keyframes flame-d {
+  from { transform: scaleY(0.94) skewX(1.5deg);  }
+  to   { transform: scaleY(1.12) skewX(-1.5deg); }
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .hobbit-scrollbar { height: 50px; }
+  body { padding-bottom: 50px; }
+  .hobbit-walker { bottom: 14px; gap: 2px; }
+  .groom-figure  { width: 20px; height: 38px; }
+  .bride-figure  { width: 23px; height: 38px; }
+  .eye-sauron    { width: 44px; height: 54px; }
+  .eye-container { width: 44px; }
+}

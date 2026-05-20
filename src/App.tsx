@@ -4,6 +4,7 @@ import Nav from './components/Nav'
 import Footer from './components/Footer'
 import FairyWandCursor from './components/FairyWandCursor'
 import MobileSpellCaster from './components/MobileSpellCaster'
+import HobbitScrollBar from './components/HobbitScrollBar'
 import Home from './pages/Home'
 import OurStory from './pages/OurStory'
 import Photos from './pages/Photos'
@@ -46,6 +47,7 @@ export default function App() {
     <BrowserRouter>
       <FairyWandCursor />
       <MobileSpellCaster />
+      <HobbitScrollBar />
       <Layout />
     </BrowserRouter>
   )
