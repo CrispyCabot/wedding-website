@@ -10,6 +10,12 @@
   padding: 0;
 }
 
+/* Hide system cursor when fairy wand is active */
+.fairy-cursor,
+.fairy-cursor * {
+  cursor: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
