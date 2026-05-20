@@ -1,11 +1,13 @@
 import { useRef, useState, useEffect } from 'react'
 import { theme } from '../config/theme'
 import {
-  type TrailParticle, type FallingHeart, type Point,
+  type TrailParticle, type FallingHeart, type BurstEmoji, type Point,
   spawnTrailParticles, drawSparkleStroke,
   detectHeart, triggerHeartSpell,
   detectStar, triggerStarSpell,
-  tickTrail, tickHearts,
+  detectCircle, triggerCircleSpell,
+  detectInfinity, triggerInfinitySpell,
+  tickTrail, tickHearts, tickBurst,
 } from './spellUtils'
 
 export default function MobileSpellCaster() {
@@ -13,6 +15,7 @@ export default function MobileSpellCaster() {
   const canvasRef   = useRef<HTMLCanvasElement>(null)
   const trail       = useRef<TrailParticle[]>([])
   const hearts      = useRef<FallingHeart[]>([])
+  const burst       = useRef<BurstEmoji[]>([])
   const strokePts   = useRef<Point[]>([])
   const fadingPts   = useRef<Point[]>([])
   const fadeAlpha   = useRef(0)
@@ -31,6 +34,7 @@ export default function MobileSpellCaster() {
     // Reset all state from any previous session
     trail.current     = []
     hearts.current    = []
+    burst.current     = []
     strokePts.current = []
     fadingPts.current = []
     fadeAlpha.current = 0
@@ -87,6 +91,16 @@ export default function MobileSpellCaster() {
         triggerStarSpell(hearts.current, w)
         fadingPts.current = []
         fadeAlpha.current = 0
+      } else if (detectCircle(pts)) {
+        for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
+        triggerCircleSpell(burst.current, cx, cy)
+        fadingPts.current = []
+        fadeAlpha.current = 0
+      } else if (detectInfinity(pts)) {
+        for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
+        triggerInfinitySpell(burst.current, w, h)
+        fadingPts.current = []
+        fadeAlpha.current = 0
       } else {
         fadingPts.current = pts
         fadeAlpha.current = 0.65
@@ -113,6 +127,7 @@ export default function MobileSpellCaster() {
 
       trail.current  = tickTrail(ctx, trail.current)
       hearts.current = tickHearts(ctx, hearts.current, h)
+      burst.current  = tickBurst(ctx, burst.current)
 
       rafId = requestAnimationFrame(tick)
     }

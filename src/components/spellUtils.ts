@@ -18,6 +18,17 @@ export interface FallingHeart {
   rot: number; rotV: number; opacity: number; emoji: string
 }
 
+// Used for radial burst (circle) and float-up (infinity) effects.
+// gravity is stored per-piece so both can share one array + one tick function.
+export interface BurstEmoji {
+  x: number; y: number
+  vx: number; vy: number
+  size: number; emoji: string
+  rot: number; rotV: number
+  opacity: number; decay: number
+  gravity: number
+}
+
 // ── Trail particle drawing ────────────────────────────────────
 
 export function drawTrailStar(ctx: CanvasRenderingContext2D, p: TrailParticle) {
@@ -266,6 +277,110 @@ export function detectStar(raw: Point[]): boolean {
   return true
 }
 
+// ── Circle detection ─────────────────────────────────────────
+
+export function detectCircle(raw: Point[]): boolean {
+  if (raw.length < MIN_STROKE_PTS) return false
+
+  const xs = raw.map(p => p.x), ys = raw.map(p => p.y)
+  const minX = Math.min(...xs), maxX = Math.max(...xs)
+  const minY = Math.min(...ys), maxY = Math.max(...ys)
+  const W = maxX - minX, H = maxY - minY
+
+  if (W < MIN_BBOX_PX || H < MIN_BBOX_PX) return false
+
+  // Aspect ratio roughly square — separates circles from infinity (> 1.5)
+  const ratio = W / H
+  if (ratio < 0.55 || ratio > 1.45) return false
+
+  const pts = raw.map(p => ({ x: (p.x - minX) / W, y: (p.y - minY) / H }))
+
+  // Must be well closed
+  const dx = pts[0].x - pts[pts.length - 1].x
+  const dy = pts[0].y - pts[pts.length - 1].y
+  if (Math.sqrt(dx * dx + dy * dy) > 0.35) return false
+
+  // Centroid
+  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length
+  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length
+
+  // All points should be roughly equidistant from centroid (low coefficient of variation)
+  const dists = pts.map(p => Math.sqrt((p.x - cx) ** 2 + (p.y - cy) ** 2))
+  const mean  = dists.reduce((s, d) => s + d, 0) / dists.length
+  const cv    = Math.sqrt(dists.reduce((s, d) => s + (d - mean) ** 2, 0) / dists.length) / mean
+  if (cv > 0.30) return false
+
+  // Few sharp direction reversals (stars & hearts have many; circles have almost none)
+  const sampled = sampleEvenly(pts, 44)
+  let sharpTurns = 0
+  for (let i = 1; i < sampled.length - 1; i++) {
+    const dx1 = sampled[i].x - sampled[i-1].x, dy1 = sampled[i].y - sampled[i-1].y
+    const dx2 = sampled[i+1].x - sampled[i].x, dy2 = sampled[i+1].y - sampled[i].y
+    const l1 = Math.sqrt(dx1*dx1 + dy1*dy1), l2 = Math.sqrt(dx2*dx2 + dy2*dy2)
+    if (l1 < 0.005 || l2 < 0.005) continue
+    const dot   = (dx1*dx2 + dy1*dy2) / (l1 * l2)
+    const angle = Math.acos(Math.max(-1, Math.min(1, dot))) * 180 / Math.PI
+    if (angle > 90) sharpTurns++
+  }
+  if (sharpTurns > 4) return false
+
+  return true
+}
+
+// ── Infinity / figure-8 detection ────────────────────────────
+
+export function detectInfinity(raw: Point[]): boolean {
+  if (raw.length < MIN_STROKE_PTS) return false
+
+  const xs = raw.map(p => p.x), ys = raw.map(p => p.y)
+  const minX = Math.min(...xs), maxX = Math.max(...xs)
+  const minY = Math.min(...ys), maxY = Math.max(...ys)
+  const W = maxX - minX, H = maxY - minY
+
+  // Must be clearly wider than tall — separates from circle (< 1.45)
+  if (W < MIN_BBOX_PX || H < 40) return false
+  const ratio = W / H
+  if (ratio < 1.5 || ratio > 5.0) return false
+
+  const pts = raw.map(p => ({ x: (p.x - minX) / W, y: (p.y - minY) / H }))
+
+  // Closure — lenient since figure-8s are sometimes left slightly open
+  const dx = pts[0].x - pts[pts.length - 1].x
+  const dy = pts[0].y - pts[pts.length - 1].y
+  if (Math.sqrt(dx * dx + dy * dy) > 0.55) return false
+
+  // Dual-lobe traversal: both halves of the stroke visit left AND right sides
+  const mid = Math.floor(pts.length / 2)
+  const first  = pts.slice(0, mid)
+  const second = pts.slice(mid)
+  if (!first.some(p => p.x < 0.42))  return false
+  if (!first.some(p => p.x > 0.58))  return false
+  if (!second.some(p => p.x < 0.42)) return false
+  if (!second.some(p => p.x > 0.58)) return false
+
+  // Center region must be visited early and late in the stroke (the crossing)
+  const centerBand = (p: Point) => p.x > 0.35 && p.x < 0.65
+  const earlyCenter = pts.slice(0, Math.floor(pts.length * 0.35)).some(centerBand)
+  const lateCenter  = pts.slice(Math.floor(pts.length * 0.65)).some(centerBand)
+  if (!earlyCenter || !lateCenter) return false
+
+  // Smooth curves — few sharp turns (unlike a star)
+  const sampled = sampleEvenly(pts, 44)
+  let sharpTurns = 0
+  for (let i = 1; i < sampled.length - 1; i++) {
+    const dx1 = sampled[i].x - sampled[i-1].x, dy1 = sampled[i].y - sampled[i-1].y
+    const dx2 = sampled[i+1].x - sampled[i].x, dy2 = sampled[i+1].y - sampled[i].y
+    const l1 = Math.sqrt(dx1*dx1 + dy1*dy1), l2 = Math.sqrt(dx2*dx2 + dy2*dy2)
+    if (l1 < 0.005 || l2 < 0.005) continue
+    const dot   = (dx1*dx2 + dy1*dy2) / (l1 * l2)
+    const angle = Math.acos(Math.max(-1, Math.min(1, dot))) * 180 / Math.PI
+    if (angle > 90) sharpTurns++
+  }
+  if (sharpTurns > 7) return false
+
+  return true
+}
+
 // ── Heart emoji rain ──────────────────────────────────────────
 
 const HEART_EMOJIS = ['❤️', '💕', '💗', '💓', '💖', '💝', '🩷', '💞']
@@ -308,6 +423,82 @@ export function triggerStarSpell(into: FallingHeart[], w: number) {
       emoji:     STAR_EMOJIS[Math.floor(Math.random() * STAR_EMOJIS.length)],
     })
   }
+}
+
+// ── Circle confetti burst ─────────────────────────────────────
+
+const CONFETTI_EMOJIS = ['🎊', '🎉', '🥂', '🎈', '✨', '🎆', '🎇', '🎊', '🎉']
+
+export function triggerCircleSpell(into: BurstEmoji[], cx: number, cy: number) {
+  const count = 45 + Math.floor(Math.random() * 15)
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2
+    const speed = 1.0 + Math.random() * 2.2
+    into.push({
+      x:       cx,
+      y:       cy,
+      vx:      Math.cos(angle) * speed,
+      vy:      Math.sin(angle) * speed,
+      size:    20 + Math.random() * 24,
+      emoji:   CONFETTI_EMOJIS[Math.floor(Math.random() * CONFETTI_EMOJIS.length)],
+      rot:     Math.random() * Math.PI * 2,
+      rotV:    (Math.random() - 0.5) * 0.18,
+      opacity: 0.9 + Math.random() * 0.1,
+      decay:   0.003 + Math.random() * 0.004,
+      gravity: 0.03 + Math.random() * 0.02,
+    })
+  }
+}
+
+// ── Infinity ring float-up ────────────────────────────────────
+
+const RING_EMOJIS = ['💍', '💎', '💍', '💫', '✨', '💍']
+
+export function triggerInfinitySpell(into: BurstEmoji[], w: number, h: number) {
+  const count = 30 + Math.floor(Math.random() * 15)
+  for (let i = 0; i < count; i++) {
+    into.push({
+      x:       Math.random() * w,
+      y:       h * 0.7 + Math.random() * h * 0.35,
+      vx:      (Math.random() - 0.5) * 1.2,
+      vy:      -(0.5 + Math.random() * 1.0),
+      size:    22 + Math.random() * 26,
+      emoji:   RING_EMOJIS[Math.floor(Math.random() * RING_EMOJIS.length)],
+      rot:     (Math.random() - 0.5) * 0.4,
+      rotV:    (Math.random() - 0.5) * 0.02,
+      opacity: 0.85 + Math.random() * 0.15,
+      decay:   0.002 + Math.random() * 0.003,
+      gravity: 0.002,
+    })
+  }
+}
+
+// ── Burst / float tick ────────────────────────────────────────
+
+export function tickBurst(
+  ctx: CanvasRenderingContext2D,
+  pieces: BurstEmoji[],
+): BurstEmoji[] {
+  const alive = pieces.filter(p => p.opacity > 0.02)
+  ctx.textAlign    = 'center'
+  ctx.textBaseline = 'middle'
+  for (const p of alive) {
+    p.x      += p.vx
+    p.y      += p.vy
+    p.vy     += p.gravity
+    p.vx     *= 0.99
+    p.rot    += p.rotV
+    p.opacity -= p.decay
+    if (p.opacity <= 0) continue
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, p.opacity)
+    ctx.translate(p.x, p.y)
+    ctx.rotate(p.rot)
+    ctx.font = `${p.size}px serif`
+    ctx.fillText(p.emoji, 0, 0)
+    ctx.restore()
+  }
+  return alive
 }
 
 // ── Tick helpers (shared animation-loop logic) ────────────────

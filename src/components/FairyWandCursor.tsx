@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react'
 import { theme } from '../config/theme'
 import {
-  type TrailParticle, type FallingHeart,
+  type TrailParticle, type FallingHeart, type BurstEmoji,
   drawTrailStar, drawTrailOrb,
   spawnTrailParticles, drawSparkleStroke,
   detectHeart, triggerHeartSpell,
   detectStar, triggerStarSpell,
-  tickTrail, tickHearts,
+  detectCircle, triggerCircleSpell,
+  detectInfinity, triggerInfinitySpell,
+  tickTrail, tickHearts, tickBurst,
 } from './spellUtils'
 
 export default function FairyWandCursor() {
@@ -14,6 +16,7 @@ export default function FairyWandCursor() {
   const wandRef   = useRef<HTMLDivElement>(null)
   const trail     = useRef<TrailParticle[]>([])
   const hearts    = useRef<FallingHeart[]>([])
+  const burst     = useRef<BurstEmoji[]>([])
   const strokePts = useRef<{ x: number; y: number }[]>([])
   const fadingPts = useRef<{ x: number; y: number }[]>([])
   const fadeAlpha = useRef(0)
@@ -85,6 +88,16 @@ export default function FairyWandCursor() {
         triggerStarSpell(hearts.current, w)
         fadingPts.current = []
         fadeAlpha.current = 0
+      } else if (detectCircle(pts)) {
+        for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
+        triggerCircleSpell(burst.current, cx, cy)
+        fadingPts.current = []
+        fadeAlpha.current = 0
+      } else if (detectInfinity(pts)) {
+        for (let i = 0; i < 5; i++) spawnTrailParticles(trail.current, cx, cy, colors, true)
+        triggerInfinitySpell(burst.current, w, h)
+        fadingPts.current = []
+        fadeAlpha.current = 0
       } else {
         fadingPts.current = pts
         fadeAlpha.current = 0.65
@@ -121,6 +134,7 @@ export default function FairyWandCursor() {
 
       trail.current  = tickTrail(ctx, trail.current)
       hearts.current = tickHearts(ctx, hearts.current, h)
+      burst.current  = tickBurst(ctx, burst.current)
 
       rafId = requestAnimationFrame(tick)
     }
