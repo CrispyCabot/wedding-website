@@ -10,10 +10,12 @@
   padding: 0;
 }
 
-/* Hide system cursor when fairy wand is active */
+/* Hide system cursor and disable text selection when fairy wand is active */
 .fairy-cursor,
 .fairy-cursor * {
   cursor: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 html {
