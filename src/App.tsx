@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import FairyWandCursor from './components/FairyWandCursor'
 import MobileSpellCaster from './components/MobileSpellCaster'
 import HobbitScrollBar from './components/HobbitScrollBar'
+import PasswordGate from './components/PasswordGate'
 import Home from './pages/Home'
 import OurStory from './pages/OurStory'
 import Photos from './pages/Photos'
@@ -44,11 +45,13 @@ function Layout() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <FairyWandCursor />
-      <MobileSpellCaster />
-      <HobbitScrollBar />
-      <Layout />
-    </BrowserRouter>
+    <PasswordGate>
+      <BrowserRouter>
+        <FairyWandCursor />
+        <MobileSpellCaster />
+        <HobbitScrollBar />
+        <Layout />
+      </BrowserRouter>
+    </PasswordGate>
   )
 }
