@@ -9,14 +9,25 @@ export interface BootstrapStackProps extends StackProps {
    * Numeric GitHub IDs, from `gh api repos/<owner>/<repo>`
    * (`.owner.id` and `.id`).
    *
-   * GitHub emits OIDC subjects using IMMUTABLE IDENTIFIERS:
+   * GitHub is midway through a rollout that changes the OIDC subject from
+   *   repo:<owner>/<repo>:ref:refs/heads/main
+   * to an IMMUTABLE-IDENTIFIER form
    *   repo:<owner>@<ownerId>/<repo>@<repoId>:ref:refs/heads/main
-   * not the plain `repo:<owner>/<repo>:...` form most examples show. A trust
-   * policy written against the plain form silently never matches, and STS
-   * reports only "Not authorized to perform sts:AssumeRoleWithWebIdentity".
+   * and which form a repository emits is NOT something you can infer from a
+   * sibling repo. As of 2026-08, poster-walls-editor emits the immutable form
+   * while wedding-website — same owner, older repo — still emits the plain
+   * one. Check before assuming:
    *
-   * Pinning the numeric IDs is also STRONGER than matching names: renaming the
-   * repo or an impostor registering the same name cannot satisfy it.
+   *   gh api repos/<owner>/<repo>/actions/oidc/customization/sub
+   *
+   * and read `sub_claim_prefix`. Getting this wrong fails closed with nothing
+   * but "Not authorized to perform sts:AssumeRoleWithWebIdentity" — STS never
+   * reveals the subject it actually received.
+   *
+   * The trust policy below accepts BOTH forms so the deploy keeps working when
+   * the rollout reaches this repository. The immutable form is the stronger of
+   * the two: renaming the repo, or an impostor claiming the freed-up name,
+   * cannot satisfy it.
    */
   readonly githubOwnerId: string;
   readonly githubRepoId: string;
@@ -46,10 +57,14 @@ export class BootstrapStack extends Stack {
           'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
         },
         StringLike: {
-          // Immutable-identifier subject form. See BootstrapStackProps.
-          'token.actions.githubusercontent.com:sub':
+          // Either subject form satisfies this — StringLike against a list is
+          // a match if ANY entry matches. See BootstrapStackProps for why both
+          // are needed.
+          'token.actions.githubusercontent.com:sub': [
+            `repo:${props.githubOwner}/${props.githubRepo}:*`,
             `repo:${props.githubOwner}@${props.githubOwnerId}` +
-            `/${props.githubRepo}@${props.githubRepoId}:*`,
+              `/${props.githubRepo}@${props.githubRepoId}:*`,
+          ],
         },
       }),
       // CDK deploys assume the CDK bootstrap roles, which requires admin-level
