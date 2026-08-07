@@ -27,8 +27,11 @@ Built with React 19 + TypeScript + Vite. Designed to be elegant, fairy-tale-like
 
 ## Directory Structure
 
+The repo is an npm workspaces monorepo. `app/` is the SPA; `infrastructure/`
+is the CDK app that hosts it. An `api/` workspace will join them later.
+
 ```
-src/
+app/src/
 ├── config/
 │   └── theme.ts          ← ⭐ CENTRAL THEME CONFIG — edit here to restyle everything
 ├── components/
@@ -46,15 +49,21 @@ src/
 ├── App.css          ← Intentionally minimal
 ├── index.css        ← Global styles (typography, buttons, utilities, layout)
 └── main.tsx         ← Calls applyTheme() before first render
+
+infrastructure/
+├── bin/app.ts                  ← Stack instantiation; holds the useCustomDomain switch
+├── lib/main-stack.ts           ← Hosted zone, certificate, DNS records
+├── lib/bootstrap-stack.ts      ← The IAM role GitHub Actions assumes
+└── lib/constructs/web.ts       ← S3 bucket + CloudFront distribution
 ```
 
 ---
 
-## Theme Configuration (`src/config/theme.ts`)
+## Theme Configuration (`app/src/config/theme.ts`)
 
 **This is the single source of truth for all design decisions.**
 
-To restyle the entire site, only edit `src/config/theme.ts`.
+To restyle the entire site, only edit `app/src/config/theme.ts`.
 
 ### What's configurable
 
@@ -136,7 +145,7 @@ theme.wedding       // Couple names, date, venue, RSVP URL, registry URL
 ## Common Tasks
 
 ### Change a colour
-Edit the relevant value in `theme.colors` in `src/config/theme.ts`. All pages update automatically.
+Edit the relevant value in `theme.colors` in `app/src/config/theme.ts`. All pages update automatically.
 
 ### Change a font
 1. Add the Google Font to the `<link>` in `index.html`
@@ -152,7 +161,7 @@ Set `theme.wedding.rsvpUrl` to the real URL. The RSVP button on the Home hero an
 Set `theme.wedding.registryUrl`, or update individual `url` fields in the `registries` array in `Registry.tsx`.
 
 ### Replace placeholder images
-Swap the `src` URL strings in each page file. For real photos, upload them to `public/` or an image host and reference them directly.
+Swap the `src` URL strings in each page file. For real photos, upload them to `app/public/` or an image host and reference them directly.
 
 ### Add a new timeline entry (Our Story)
 Append an object to the `timeline` array in `OurStory.tsx` with `{ year, title, icon, text, img, imgAlt }`.
@@ -164,50 +173,42 @@ Add an object to `bridalParty` or `groomsParty` in `WeddingParty.tsx` with `{ na
 
 ## Development
 
+Run these from the repo root; they delegate to the right workspace.
+
 ```bash
-npm run dev       # Start local dev server (http://localhost:5173)
-npm run build     # Production build → dist/
-npm run preview   # Preview the production build locally
-npm run lint      # ESLint
+npm run dev        # Start local dev server (http://localhost:5173)
+npm run build      # Production build → app/dist/
+npm run typecheck  # tsc across app/ and infrastructure/
+npm run preview    # Preview the production build locally
+npm run lint       # ESLint (app/ only; not run in CI)
 ```
 
 ---
 
 ## Deployment Notes
 
-- The site uses `BrowserRouter` — the server must handle HTML5 pushState routing (serve `index.html` for all routes).
-- For static hosts (Netlify, Vercel, GitHub Pages), add a redirect rule: all `/*` → `/index.html`.
-- All images are currently loaded from Unsplash CDN — no local assets needed beyond the favicon.
+- **Repo:** `github.com/CrispyCabot/wedding-website`
+- **Live URL:** `https://chrismaddie.bridewell.me`
+- **Host:** AWS — S3 behind CloudFront, in account `866629517187`, `us-east-1`
+- Deployments trigger automatically on every push to `main` via
+  `.github/workflows/deploy.yml`, which authenticates to AWS with GitHub OIDC
+  (no stored access keys) and assumes `WeddingWebsiteGithubDeploy`.
 
-### Current deployment: GitHub Pages via GitHub Actions
+The site uses `BrowserRouter`, so the host must serve `index.html` for every
+path. CloudFront does this via `errorResponses` in
+`infrastructure/lib/constructs/web.ts`, which rewrite 403 and 404 to
+`/index.html` at status 200.
 
-- **Repo:** `github.com/cbridewell5/wedding-website`
-- **Custom domain:** `chrisbridewell.dev` — configured as a CNAME pointing to `cbridewell5.github.io` (the user-level GitHub Pages apex, not this repo directly)
-- **Effective base path:** `/wedding-website/` — because the custom domain maps to the whole GitHub Pages account, this repo's site lives at the sub-path `/wedding-website/`
-- **Live URL:** `https://chrisbridewell.dev/wedding-website/`
-- Deployments trigger automatically on every push to `main` via `.github/workflows/deploy.yml`
+**Do not reintroduce `public/404.html` or `public/CNAME`.** Both were GitHub
+Pages workarounds, removed in the AWS migration. The `404.html` redirect shim
+bounced unknown routes through a `?p=` query parameter; CloudFront resolves
+deep links on the first request instead.
 
-### Changing the domain or base path
+`vite.config.ts` keeps `base: '/'` and `App.tsx` has no `basename` — the site
+is served from the domain root, not a sub-path.
 
-**Critical:** three files must stay in sync whenever the domain or base path changes.
-
-| File | What to change |
-|------|---------------|
-| `vite.config.ts` | `base` — must match the sub-path (e.g. `'/wedding-website/'`). Set to `'/'` if the domain maps directly to this repo's root. |
-| `src/App.tsx` | `<BrowserRouter basename="...">` — must match the sub-path without trailing slash (e.g. `"/wedding-website"`). Remove the prop entirely if serving from root. |
-| `public/404.html` | The `slice(0, 2)` in the redirect script keeps the sub-path prefix when bouncing unknown routes back to the app. If serving from root (no sub-path), remove the `l.pathname.split('/').slice(0, 2).join('/')` segment and replace with `''`. |
-| `public/CNAME` | Set to the bare domain (e.g. `chrisbridewell.dev`). GitHub Pages resets the custom domain on every deploy without this file. |
-
-**If moving to a domain that maps directly to this repo root** (e.g. a dedicated `mysite.com` → `cbridewell5.github.io/wedding-website` mapping, or a `username.github.io` repo):
-1. Set `base: '/'` in `vite.config.ts` (or remove the `base` line)
-2. Remove `basename` from `<BrowserRouter>` in `App.tsx`
-3. Simplify `public/404.html` redirect to omit the sub-path prefix
-4. Update `public/CNAME` to the new domain
-
-**If keeping the sub-path structure** but renaming the repo:
-1. Update `base` in `vite.config.ts` to `'/new-repo-name/'`
-2. Update `basename` in `App.tsx` to `"/new-repo-name"`
-3. The `404.html` redirect logic stays the same (it reads the path dynamically)
+See `infrastructure/README.md` for the stacks, the `useCustomDomain`
+two-phase domain switch, and how to read stack outputs.
 
 ---
 

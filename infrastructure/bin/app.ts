@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+import { App } from 'aws-cdk-lib';
+import { BootstrapStack } from '../lib/bootstrap-stack.js';
+import { MainStack } from '../lib/main-stack.js';
+
+const app = new App();
+
+// `exactOptionalPropertyTypes` forbids assigning `string | undefined` to an
+// optional `string` field, so omit `account` entirely when unset instead of
+// passing it through as `undefined`.
+const env = {
+  ...(process.env.CDK_DEFAULT_ACCOUNT ? { account: process.env.CDK_DEFAULT_ACCOUNT } : {}),
+  region: process.env.CDK_DEFAULT_REGION ?? 'us-east-1',
+};
+
+new MainStack(app, 'WeddingWebsite', {
+  stackName: 'WeddingWebsite',
+  env,
+  useCustomDomain: false,
+});
+
+new BootstrapStack(app, 'WeddingWebsiteBootstrap', {
+  stackName: 'WeddingWebsiteBootstrap',
+  env,
+  githubOwner: 'CrispyCabot',
+  githubRepo: 'wedding-website',
+  githubOwnerId: '18431358',
+  githubRepoId: '1242656213',
+});
