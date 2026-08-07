@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# Wedding Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Maddie Sheets & Chris Bridewell — September 11, 2027, Landoll's Mohican
+Castle, Loudonville, Ohio.
 
-Currently, two official plugins are available:
+Live at **https://chrismaddie.bridewell.me**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Layout
 
-## React Compiler
+An npm workspaces monorepo.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Workspace | What it is |
+|---|---|
+| `app/` | The React + TypeScript + Vite SPA |
+| `infrastructure/` | AWS CDK app — S3, CloudFront, Route53, ACM |
 
-## Expanding the ESLint configuration
+An `api/` workspace will join them later.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Run from the repo root; each script delegates to the right workspace.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # → app/dist/
+npm run typecheck  # tsc across app/ and infrastructure/
+npm run lint       # ESLint (app/ only)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deployment
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Every push to `main` runs `.github/workflows/deploy.yml`, which authenticates
+to AWS with GitHub OIDC — no stored access keys — deploys the `WeddingWebsite`
+stack, syncs `app/dist` to S3, and invalidates the CloudFront distribution.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Infrastructure details, the one-time bootstrap step, and the custom-domain
+cutover are in [`infrastructure/README.md`](infrastructure/README.md).
+
+## Documentation
+
+- [`CLAUDE.md`](CLAUDE.md) — theme config, page contents, common tasks
+- [`docs/superpowers/specs/`](docs/superpowers/specs/) — design records

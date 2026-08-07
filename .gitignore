@@ -11,6 +11,18 @@ node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
+
+# cdk
+infrastructure/cdk.out/
+cdk.out/
+.cdk.staging/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+aws-credentials.txt
 
 # Editor directories and files
 .vscode/*
