@@ -44,9 +44,9 @@ const timeline: Milestone[] = [
     year: "March 2023",
     title: "How We Met",
     icon: "✨",
-    text: `We matched on Tinder in March of 2023 and bonded almost immediately over margaritas. Our first date was at Lalo on May 11th — where, naturally, we were both far too nervous to order one. Not long after came the first of many candlelight concerts: a classic rock set that turned out to be the perfect meeting point between ${p2First}'s taste for rock and heavier music and ${p1First}'s love of strings.`,
+    text: `We matched on Tinder in March of 2023 and bonded almost immediately over margaritas. Our first date was at Lalo on March 11th. Naturally, we were both far too nervous to actually order one. Not long after came the first of many candlelight concerts, a classic rock set that landed right where our tastes overlap, with ${p2First}'s rock and heavier music meeting ${p1First}'s love of strings.`,
     img: storyPhoto("how-we-met.jpg"),
-    imgAlt: `${p1First} and ${p2First} early on`,
+    imgAlt: "The two of us early on",
     imgHeight: 380,
   },
   {
@@ -54,18 +54,18 @@ const timeline: Milestone[] = [
     year: "September 2023",
     title: "Our First Adventure",
     icon: "🌴",
-    text: `That September, ${p1First} came along to the Bon Aire Resort in St. Pete for ${p2First}'s family trip — her first time meeting everyone all at once, and her first proper Florida beach week. It was also her introduction to the rum runner, which ${p2First} considered a non-negotiable part of the orientation.`,
+    text: `That September we spent a week at the Bon Aire Resort in St. Pete with ${p2First}'s family. It was our first real trip together, and the week ${p2First} insisted ${p1First} had to try a rum runner. It has been a fixture of every beach day since.`,
     img: storyPhoto("bon-aire.png"),
     imgAlt: "Bon Aire Resort, St. Pete Beach",
   },
   {
     id: "concerts",
     year: "Ever Since",
-    title: "A Standing Ticket Order",
+    title: "Don't Forget Earplugs",
     icon: "🎸",
-    text: `Somewhere along the way, live music became our thing. It started with Louis Tomlinson and never really stopped — multiple 5 Seconds of Summer shows, Sonic Temple, Lynyrd Skynyrd, and more nights than we can reasonably count. The list keeps growing, and we have no plans to stop it.`,
+    text: `Somewhere along the way, live music became our thing. It started with Louis Tomlinson and never really stopped: multiple 5 Seconds of Summer shows, Sonic Temple, Lynyrd Skynyrd, The Maine, grandson, and more nights than we can reasonably count. The list keeps growing, and we have no plans to stop it.`,
     img: storyPhoto("concerts.jpg"),
-    imgAlt: `${p1First} and ${p2First} at a concert`,
+    imgAlt: "The two of us at a concert",
     imgHeight: 400,
   },
   {
@@ -73,7 +73,7 @@ const timeline: Milestone[] = [
     year: "November 2024",
     title: "Building a Life Together",
     icon: "🏡",
-    text: `In November of 2024 we got our house in Covington — the first place that was ours. Everything since has been the good, ordinary work of turning it into a home.`,
+    text: `In November of 2024 we got our house in Covington, the first place that was truly ours. Everything since has been the good, ordinary work of turning it into a home.`,
     img: storyPhoto("our-house.jpg"),
     imgAlt: "Our house in Covington",
     imgHeight: 520,
@@ -83,18 +83,19 @@ const timeline: Milestone[] = [
     year: "January 2026",
     title: "The Proposal",
     icon: "💍",
-    text: `On January 17th, 2026, we got engaged at Krohn Conservatory — a glass house full of green and bloom in the middle of an Ohio Valley winter. She said yes.`,
+    text: `On January 17th, 2026, we got engaged at Krohn Conservatory, a glass house full of green and bloom in the middle of an Ohio Valley winter. It was the easiest yes either of us has ever given.`,
     img: storyPhoto("proposal.jpg"),
     imgAlt: "Our engagement at Krohn Conservatory",
+    imgHeight: 520,
   },
   {
     id: "forever-begins",
     year: "September 2027",
     title: "Forever Begins",
     icon: "🌸",
-    text: `And now — ${venue}, on ${date}. We cannot wait to celebrate the start of our forever with the people who got us here.`,
+    text: `Which brings us to ${venue} on ${date}. We can't wait to celebrate the start of our forever with the people who got us here.`,
     img: storyPhoto("forever-begins.jpg"),
-    imgAlt: `${p1First} and ${p2First}`,
+    imgAlt: "The two of us",
   },
 ];
 
@@ -131,8 +132,8 @@ export default function OurStory() {
               lineHeight: 1.8,
             }}
           >
-            "Some love stories begin with a single moment — a look, a laugh, a
-            hello — and from that spark, an entire world unfolds."
+            "Some love stories begin with a single moment. A look, a laugh, a
+            hello. And from that spark, an entire world unfolds."
           </p>
         </div>
       </section>
