@@ -54,7 +54,7 @@ const timeline: Milestone[] = [
     year: "September 2023",
     title: "Our First Adventure",
     icon: "🌴",
-    text: `That September we spent a week at the Bon Aire Resort in St. Pete with ${p2First}'s family. It was our first real trip together, and the week ${p2First} insisted ${p1First} had to try a rum runner. It has been a fixture of every beach day since.`,
+    text: `That September we spent a week at the Bon Aire Resort in St. Pete with ${p2First}'s family. It was ${p1First}'s first time meeting everyone all at once. It was also her introduction to the rum runner, which Chris considered a non-negotiable part of the orientation. It has been a fixture of every beach day since.`,
     img: storyPhoto("bon-aire.png"),
     imgAlt: "Bon Aire Resort, St. Pete Beach",
   },
