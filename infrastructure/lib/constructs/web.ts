@@ -1,4 +1,4 @@
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
 import type * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -21,6 +21,12 @@ export class WebConstruct extends Construct {
 
   constructor(scope: Construct, id: string, props: WebConstructProps = {}) {
     super(scope, id);
+
+    // Everything this construct owns is static-site delivery: the bucket and
+    // the distribution. The auto-delete-objects handler CDK adds behind the
+    // bucket stays untagged — `CustomResourceProvider` resources are
+    // synthesized outside the construct tree, so tag aspects never visit them.
+    Tags.of(this).add('component', 'web');
 
     // Holds only build output. Every object is reproducible from a `git push`,
     // so the bucket is safe to destroy with the stack.

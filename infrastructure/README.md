@@ -32,6 +32,33 @@ gh variable set AWS_REGION -R CrispyCabot/wedding-website -b us-east-1
 Hosted zone, ACM certificate, S3 bucket, and CloudFront distribution.
 Deployed by `.github/workflows/deploy.yml` on every push to `main`.
 
+## Tagging
+
+Every taggable resource in both stacks carries three tags. `lib/tags.ts` holds
+the two constant ones; the constructs add the third.
+
+| Tag | Value | Why |
+|---|---|---|
+| `project` | `wedding-website` | The account is shared with poster-walls-editor. This is the only thing separating the two in the console and in Cost Explorer. |
+| `environment` | `prd` | There are no lower environments; `main` deploys straight to production. The tag exists so filters written today survive a staging stack appearing later. |
+| `component` | `web`, `dns`, `ci-cd` | Which part of the system a resource belongs to. |
+
+`applyStandardTags(this)` is called from each stack's **constructor**, not once
+on the `App` in `bin/app.ts`. Both propagate identically at deploy time, but a
+stack that tags itself is still tagged when something other than `bin/app.ts`
+instantiates it — a test app, or a future `Stage`.
+
+Two things tag aspects do not reach, and neither is a bug:
+
+- `CustomResourceProvider` resources — the auto-delete-objects handler behind
+  the web bucket, and its role. They are synthesized outside the construct
+  tree, so no aspect visits them.
+- `AWS::Route53::RecordSet`. Record sets are not taggable in CloudFormation at
+  all; the hosted zone that holds them is.
+
+Tags apply on the next deploy. They are a template change like any other, so
+`cdk diff` shows them before they land.
+
 ## The `useCustomDomain` switch
 
 `bin/app.ts` passes `useCustomDomain` to `MainStack`. It is a two-phase

@@ -5,6 +5,9 @@ import { MainStack } from '../lib/main-stack.js';
 
 const app = new App();
 
+// The `project`/`environment` tags are not applied here. Each stack applies
+// them to itself via `applyStandardTags` — see lib/tags.ts.
+
 // `exactOptionalPropertyTypes` forbids assigning `string | undefined` to an
 // optional `string` field, so omit `account` entirely when unset instead of
 // passing it through as `undefined`.

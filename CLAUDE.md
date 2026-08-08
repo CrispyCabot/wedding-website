@@ -54,6 +54,7 @@ infrastructure/
 ├── bin/app.ts                  ← Stack instantiation; holds the useCustomDomain switch
 ├── lib/main-stack.ts           ← Hosted zone, certificate, DNS records
 ├── lib/bootstrap-stack.ts      ← The IAM role GitHub Actions assumes
+├── lib/tags.ts                 ← project/environment tags both stacks apply
 └── lib/constructs/web.ts       ← S3 bucket + CloudFront distribution
 ```
 
@@ -207,8 +208,15 @@ deep links on the first request instead.
 `vite.config.ts` keeps `base: '/'` and `App.tsx` has no `basename` — the site
 is served from the domain root, not a sub-path.
 
+Every taggable AWS resource carries `project=wedding-website`,
+`environment=prd`, and a `component` tag (`web`, `dns`, or `ci-cd`). The
+account is shared with poster-walls-editor, so `project` is what tells the two
+apart in the console and in Cost Explorer. New constructs should tag themselves
+with a `component`; the other two come from `applyStandardTags` in
+`infrastructure/lib/tags.ts`, which each stack calls in its constructor.
+
 See `infrastructure/README.md` for the stacks, the `useCustomDomain`
-two-phase domain switch, and how to read stack outputs.
+two-phase domain switch, the tagging convention, and how to read stack outputs.
 
 ---
 

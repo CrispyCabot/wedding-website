@@ -1,6 +1,7 @@
-import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Stack, Tags, type StackProps } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
+import { applyStandardTags } from './tags.js';
 
 export interface BootstrapStackProps extends StackProps {
   readonly githubOwner: string;
@@ -41,6 +42,13 @@ export interface BootstrapStackProps extends StackProps {
 export class BootstrapStack extends Stack {
   constructor(scope: Construct, id: string, props: BootstrapStackProps) {
     super(scope, id, props);
+
+    applyStandardTags(this);
+
+    // This stack holds nothing the application runs on — only the identity
+    // GitHub Actions assumes. Tagging it separately makes the deploy role easy
+    // to tell apart from the two accounts' near-identical application roles.
+    Tags.of(this).add('component', 'ci-cd');
 
     // REFERENCED, not created. An OIDC provider is an account-level singleton
     // keyed on its URL, and this account already has one — the Poster Walls

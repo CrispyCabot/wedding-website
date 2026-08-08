@@ -1,9 +1,10 @@
-import { CfnOutput, Fn, Stack, type StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Fn, Stack, Tags, type StackProps } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import { WebConstruct } from './constructs/web.js';
+import { applyStandardTags } from './tags.js';
 
 /** The subdomain the site lives on. Its zone is delegated; the apex is not. */
 export const DOMAIN_NAME = 'chrismaddie.bridewell.me';
@@ -26,12 +27,15 @@ export class MainStack extends Stack {
   constructor(scope: Construct, id: string, props: MainStackProps) {
     super(scope, id, props);
 
+    applyStandardTags(this);
+
     // Created in both phases. A zone with no records costs $0.50/month and is
     // what makes the delegation step possible at all.
     const zone = new route53.PublicHostedZone(this, 'Zone', {
       zoneName: DOMAIN_NAME,
       comment: 'Delegated subdomain; bridewell.me stays with the registrar',
     });
+    Tags.of(zone).add('component', 'dns');
 
     // CloudFront requires its certificate in us-east-1, and the whole stack
     // lives there, so no cross-region stack is needed.
@@ -41,6 +45,10 @@ export class MainStack extends Stack {
           validation: acm.CertificateValidation.fromDns(zone),
         })
       : undefined;
+
+    if (certificate !== undefined) {
+      Tags.of(certificate).add('component', 'dns');
+    }
 
     const web = new WebConstruct(this, 'Web', {
       ...(certificate === undefined ? {} : { domainName: DOMAIN_NAME, certificate }),
