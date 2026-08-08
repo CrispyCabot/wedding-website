@@ -16,7 +16,7 @@ const env = {
 new MainStack(app, 'WeddingWebsite', {
   stackName: 'WeddingWebsite',
   env,
-  useCustomDomain: false,
+  useCustomDomain: true,
 });
 
 new BootstrapStack(app, 'WeddingWebsiteBootstrap', {
