@@ -1,54 +1,94 @@
+import { useState } from 'react';
 import { theme } from '../config/theme';
 import './OurStory.css';
 
-const { partner1, partner2 } = theme.wedding;
+const { partner1, partner2, venue, date } = theme.wedding;
 const [p1First] = partner1.split(' ');
 const [p2First] = partner2.split(' ');
 
-const timeline = [
+/**
+ * Photos live in the media bucket, not in the bundle — see
+ * infrastructure/lib/constructs/media.ts. A key uploaded to
+ * `s3://wedding-website-media-<account>/media/story/x.jpg` is served at
+ * `/media/story/x.jpg`. Until one is uploaded the card falls back to a
+ * decorative panel rather than a broken image.
+ */
+const storyPhoto = (file: string) => `/media/story/${file}`;
+
+interface Milestone {
+  id: string;
+  year: string;
+  title: string;
+  icon: string;
+  text: string;
+  img: string;
+  imgAlt: string;
+}
+
+const timeline: Milestone[] = [
   {
-    year: '2018',
+    id: 'how-we-met',
+    year: 'March 2023',
     title: 'How We Met',
     icon: '✨',
-    text: `[Placeholder] This is where you'll tell the story of how ${p1First} and ${p2First} first crossed paths. Was it a chance encounter, a mutual friend, or a story only the two of you could dream up? Fill this in with your real "how we met" story!`,
-    img: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&q=80&auto=format&fit=crop',
-    imgAlt: 'Two people meeting for the first time',
+    text: `We matched on Tinder in March of 2023 and bonded almost immediately over margaritas. Our first date was at Lalo on May 11th — where, naturally, we were both far too nervous to order one. Not long after came the first of many candlelight concerts: a classic rock set that turned out to be the perfect meeting point between ${p2First}'s taste for rock and heavier music and ${p1First}'s love of strings.`,
+    img: storyPhoto('how-we-met.jpg'),
+    imgAlt: `${p1First} and ${p2First} early on`,
   },
   {
-    year: '2020',
+    id: 'first-adventure',
+    year: 'September 2023',
     title: 'Our First Adventure',
-    icon: '🌿',
-    text: `[Placeholder] Describe your first big trip, date, or adventure together. Where did you go? What made it special? This is a great place to share a favourite early memory — a road trip, a hike, a spontaneous weekend getaway.`,
-    img: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80&auto=format&fit=crop',
-    imgAlt: 'Couple on an adventure in nature',
+    icon: '🌴',
+    text: `That September, ${p1First} came along to the Bon Aire Resort in St. Pete for ${p2First}'s family trip — her first time meeting everyone all at once, and her first proper Florida beach week. It was also her introduction to the rum runner, which ${p2First} considered a non-negotiable part of the orientation.`,
+    img: storyPhoto('bon-aire.png'),
+    imgAlt: 'Bon Aire Resort, St. Pete Beach',
   },
   {
-    year: '2022',
+    id: 'concerts',
+    year: 'Ever Since',
+    title: 'A Standing Ticket Order',
+    icon: '🎸',
+    text: `Somewhere along the way, live music became our thing. It started with Louis Tomlinson and never really stopped — multiple 5 Seconds of Summer shows, Sonic Temple, Lynyrd Skynyrd, and more nights than we can reasonably count. The list keeps growing, and we have no plans to stop it.`,
+    img: storyPhoto('concerts.jpg'),
+    imgAlt: `${p1First} and ${p2First} at a concert`,
+  },
+  {
+    id: 'our-house',
+    year: 'November 2024',
     title: 'Building a Life Together',
     icon: '🏡',
-    text: `[Placeholder] Share a milestone in your relationship — moving in together, adopting a pet, a special celebration. This is where your story deepens and you started building the foundation of your shared life.`,
-    img: 'https://images.unsplash.com/photo-1583244532610-8b58cec83085?w=600&q=80&auto=format&fit=crop',
-    imgAlt: 'Couple at home together',
+    text: `In November of 2024 we got our house in Covington — the first place that was ours. Everything since has been the good, ordinary work of turning it into a home.`,
+    img: storyPhoto('our-house.jpg'),
+    imgAlt: 'Our house in Covington',
   },
   {
-    year: '2025',
+    id: 'proposal',
+    year: 'January 2026',
     title: 'The Proposal',
     icon: '💍',
-    text: `[Placeholder] Tell the story of the proposal! Where were you? How did it happen? Was it a complete surprise or had you talked about it? Share all the magical details of the moment ${p2First} said yes!`,
-    img: 'https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=600&q=80&auto=format&fit=crop',
-    imgAlt: 'Romantic proposal moment',
+    text: `On January 17th, 2026, we got engaged at Krohn Conservatory — a glass house full of green and bloom in the middle of an Ohio Valley winter. She said yes.`,
+    img: storyPhoto('proposal.jpg'),
+    imgAlt: 'Our engagement at Krohn Conservatory',
   },
   {
-    year: '2027',
+    id: 'forever-begins',
+    year: 'September 2027',
     title: 'Forever Begins',
     icon: '🌸',
-    text: `[Placeholder] And now — the wedding! We can't wait to celebrate the beginning of our forever with all of you. ${p1First} &amp; ${p2First}'s story continues, and we're so grateful you're part of it.`,
-    img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80&auto=format&fit=crop',
-    imgAlt: 'Wedding celebration',
+    text: `And now — ${venue}, on ${date}. We cannot wait to celebrate the start of our forever with the people who got us here.`,
+    img: storyPhoto('forever-begins.jpg'),
+    imgAlt: `${p1First} and ${p2First}`,
   },
 ];
 
 export default function OurStory() {
+  // A photo that has not been uploaded yet does not 404 cleanly: CloudFront's
+  // SPA error responses rewrite it to index.html at status 200. The browser
+  // cannot decode HTML as an image, so onError still fires and the card swaps
+  // to its fallback panel.
+  const [missing, setMissing] = useState<Record<string, true>>({});
+
   return (
     <main>
       <div className="page-hero">
@@ -59,19 +99,11 @@ export default function OurStory() {
       {/* Intro */}
       <section className="section">
         <div className="container" style={{ textAlign: 'center', maxWidth: 680 }}>
-          <span className="placeholder-badge" style={{ marginBottom: 20, display: 'inline-flex' }}>
-            ✏️ Content Coming Soon
-          </span>
           <h2 className="story-intro__heading script">{p1First} &amp; {p2First}</h2>
           <div className="ornament">✦ ✦ ✦</div>
           <p style={{ marginTop: 20, fontSize: '1.08rem', fontStyle: 'italic', fontFamily: 'var(--font-heading)', lineHeight: 1.8 }}>
             "Some love stories begin with a single moment — a look, a laugh, a hello —
             and from that spark, an entire world unfolds."
-          </p>
-          <p style={{ marginTop: 16, color: 'var(--text-light)', fontSize: '0.9rem' }}>
-            This page is ready and waiting to be filled with <em>your</em> story.
-            The timeline below has placeholder content — replace each section with
-            your real memories and moments.
           </p>
         </div>
       </section>
@@ -86,14 +118,26 @@ export default function OurStory() {
 
           <div className="timeline">
             {timeline.map((item, i) => (
-              <div key={item.year} className={`timeline-item${i % 2 === 1 ? ' timeline-item--right' : ''} fade-up`}>
+              <div key={item.id} className={`timeline-item${i % 2 === 1 ? ' timeline-item--right' : ''} fade-up`}>
                 <div className="timeline-item__content card">
-                  <img src={item.img} alt={item.imgAlt} className="timeline-item__img" loading="lazy" />
+                  {missing[item.id] ? (
+                    <div className="timeline-item__img timeline-item__img--pending" aria-hidden>
+                      <span>{item.icon}</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={item.img}
+                      alt={item.imgAlt}
+                      className="timeline-item__img"
+                      loading="lazy"
+                      onError={() => setMissing((m) => ({ ...m, [item.id]: true }))}
+                    />
+                  )}
                   <div className="timeline-item__body">
                     <span className="timeline-item__icon">{item.icon}</span>
                     <p className="cinzel timeline-item__year">{item.year}</p>
                     <h3>{item.title}</h3>
-                    <p dangerouslySetInnerHTML={{ __html: item.text }} />
+                    <p>{item.text}</p>
                   </div>
                 </div>
                 <div className="timeline-item__dot" aria-hidden />

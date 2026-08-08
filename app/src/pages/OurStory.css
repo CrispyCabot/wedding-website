@@ -50,6 +50,23 @@
   object-fit: cover;
 }
 
+/* Stands in for a photo that has not been uploaded yet. Reads as a deliberate
+   decorative panel rather than a gap, so the page looks finished either way. */
+.timeline-item__img--pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 30% 25%, var(--color-lavender-light), transparent 60%),
+    linear-gradient(135deg, var(--color-mauve-light), var(--color-rose-gold-light));
+  border-bottom: 1px solid var(--border-light);
+}
+
+.timeline-item__img--pending span {
+  font-size: 2.6rem;
+  opacity: 0.55;
+}
+
 .timeline-item__body {
   padding: 24px 28px;
 }

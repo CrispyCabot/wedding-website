@@ -55,7 +55,8 @@ infrastructure/
 ├── lib/main-stack.ts           ← Hosted zone, certificate, DNS records
 ├── lib/bootstrap-stack.ts      ← The IAM role GitHub Actions assumes
 ├── lib/tags.ts                 ← project/environment tags both stacks apply
-└── lib/constructs/web.ts       ← S3 bucket + CloudFront distribution
+├── lib/constructs/web.ts       ← S3 bucket + CloudFront distribution
+└── lib/constructs/media.ts     ← S3 bucket for hand-uploaded photos
 ```
 
 ---
@@ -208,11 +209,35 @@ deep links on the first request instead.
 `vite.config.ts` keeps `base: '/'` and `App.tsx` has no `basename` — the site
 is served from the domain root, not a sub-path.
 
+### Photos and other uploaded assets
+
+There are two S3 buckets and they are not interchangeable. The **web bucket**
+holds `app/dist` and is published with `aws s3 sync --delete`, so anything
+uploaded there by hand is destroyed on the next push to `main`. Photos go in
+the **media bucket** (`wedding-website-media-<account>`, `RETAIN` + versioned),
+served at `/media/*` through the same CloudFront distribution. Keys map 1:1
+onto URL paths including the `media/` prefix:
+
+```sh
+aws s3 cp ./proposal.jpg "s3://wedding-website-media-866629517187/media/story/proposal.jpg"
+```
+
+Because the distribution's SPA error responses are distribution-wide, a key
+that does not exist returns `index.html` at status 200, not a 404. Pages that
+reference media should handle that — `OurStory.tsx` uses an `<img onError>`
+fallback so a not-yet-uploaded photo renders a decorative panel.
+
+Small, permanent assets that belong to the build (favicon, icon sprite) stay in
+`app/public/`. Photos do not — they would bloat git history and make swapping
+an image a code change.
+
+### Tagging
+
 Every taggable AWS resource carries `project=wedding-website`,
-`environment=prd`, and a `component` tag (`web`, `dns`, or `ci-cd`). The
-account is shared with poster-walls-editor, so `project` is what tells the two
-apart in the console and in Cost Explorer. New constructs should tag themselves
-with a `component`; the other two come from `applyStandardTags` in
+`environment=prd`, and a `component` tag (`web`, `media`, `dns`, or `ci-cd`).
+The account is shared with poster-walls-editor, so `project` is what tells the
+two apart in the console and in Cost Explorer. New constructs should tag
+themselves with a `component`; the other two come from `applyStandardTags` in
 `infrastructure/lib/tags.ts`, which each stack calls in its constructor.
 
 See `infrastructure/README.md` for the stacks, the `useCustomDomain`
@@ -226,7 +251,8 @@ Items still needed before the site goes fully live:
 
 - [ ] Real RSVP form URL → `theme.wedding.rsvpUrl`
 - [ ] Real registry URLs → `theme.wedding.registryUrl` and `Registry.tsx`
-- [ ] Our Story content → `OurStory.tsx` `timeline` array
+- [x] ~~Our Story content~~ → written; six photos still to upload to
+      `media/story/` in the media bucket (see *Photos and other uploaded assets*)
 - [ ] Real engagement / couple photos → `Photos.tsx` and `WeddingParty.tsx`
 - [ ] Wedding party names & bios → `WeddingParty.tsx`
 - [ ] Ceremony & reception times → `QA.tsx` answers + `Travel.tsx`

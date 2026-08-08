@@ -29,8 +29,45 @@ gh variable set AWS_REGION -R CrispyCabot/wedding-website -b us-east-1
 
 ### `WeddingWebsite`
 
-Hosted zone, ACM certificate, S3 bucket, and CloudFront distribution.
+Hosted zone, ACM certificate, two S3 buckets, and the CloudFront distribution.
 Deployed by `.github/workflows/deploy.yml` on every push to `main`.
+
+## The two buckets
+
+They are separate on purpose and behave differently.
+
+| | Web bucket | Media bucket |
+|---|---|---|
+| Holds | `app/dist` build output | Photos and other hand-uploaded assets |
+| Written by | `aws s3 sync --delete` in the deploy workflow | You, by hand |
+| Name | CDK-generated | `wedding-website-media-<account>` |
+| On stack delete | `DESTROY` + `autoDeleteObjects` | `RETAIN`, and versioned |
+| Served at | `/*` | `/media/*` |
+
+**Do not upload photos to the web bucket.** The deploy publishes with
+`aws s3 sync app/dist … --delete`, so anything not in the build output is
+deleted on the next push to `main`. The media bucket exists because of that.
+
+Keys map 1:1 onto URL paths, `media/` prefix included:
+
+```sh
+BUCKET=$(aws cloudformation describe-stacks --stack-name WeddingWebsite \
+  --query "Stacks[0].Outputs[?OutputKey=='MediaBucketName'].OutputValue" --output text)
+
+aws s3 cp ./proposal.jpg "s3://$BUCKET/media/story/proposal.jpg"
+```
+
+That object is then live at `https://chrismaddie.bridewell.me/media/story/proposal.jpg`.
+CloudFront caches aggressively, so invalidate after replacing an existing key:
+
+```sh
+aws cloudfront create-invalidation --distribution-id <id> --paths '/media/*'
+```
+
+One sharp edge: the distribution's custom error responses are distribution-wide,
+so a key that does not exist returns `index.html` with status 200 rather than a
+404. `OurStory.tsx` handles this with an `<img onError>` fallback — a missing
+photo shows a decorative panel instead of a broken image.
 
 ## Tagging
 
@@ -41,7 +78,7 @@ the two constant ones; the constructs add the third.
 |---|---|---|
 | `project` | `wedding-website` | The account is shared with poster-walls-editor. This is the only thing separating the two in the console and in Cost Explorer. |
 | `environment` | `prd` | There are no lower environments; `main` deploys straight to production. The tag exists so filters written today survive a staging stack appearing later. |
-| `component` | `web`, `dns`, `ci-cd` | Which part of the system a resource belongs to. |
+| `component` | `web`, `media`, `dns`, `ci-cd` | Which part of the system a resource belongs to. |
 
 `applyStandardTags(this)` is called from each stack's **constructor**, not once
 on the `App` in `bin/app.ts`. Both propagate identically at deploy time, but a

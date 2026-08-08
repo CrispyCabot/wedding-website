@@ -3,6 +3,7 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
+import { MediaConstruct } from './constructs/media.js';
 import { WebConstruct } from './constructs/web.js';
 import { applyStandardTags } from './tags.js';
 
@@ -50,7 +51,10 @@ export class MainStack extends Stack {
       Tags.of(certificate).add('component', 'dns');
     }
 
+    const media = new MediaConstruct(this, 'Media');
+
     const web = new WebConstruct(this, 'Web', {
+      mediaBucket: media.mediaBucket,
       ...(certificate === undefined ? {} : { domainName: DOMAIN_NAME, certificate }),
     });
 
@@ -69,6 +73,10 @@ export class MainStack extends Stack {
 
     new CfnOutput(this, 'WebUrl', { value: webUrl });
     new CfnOutput(this, 'WebBucketName', { value: web.webBucket.bucketName });
+    new CfnOutput(this, 'MediaBucketName', {
+      description: 'Upload photos here; keys map 1:1 onto /media/* URL paths',
+      value: media.mediaBucket.bucketName,
+    });
     new CfnOutput(this, 'DistributionId', { value: web.distribution.distributionId });
 
     // The whole point of phase one: these four go into the registrar.
