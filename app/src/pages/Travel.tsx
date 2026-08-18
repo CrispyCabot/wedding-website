@@ -1,4 +1,6 @@
 import { theme } from '../config/theme';
+import FaqAccordion from '../components/FaqAccordion';
+import { travelFaqs } from '../data/travelFaqs';
 import './Travel.css';
 
 const { venue, venueLocation } = theme.wedding;
@@ -11,7 +13,7 @@ const hotels = [
     price: 'Varies by room type',
     distance: 'On-site',
     phone: null as string | null,
-    url: 'https://www.landollsmohicancastle.com',
+    url: '#booking-checkin',
     badge: '⭐ Recommended',
     img: 'https://landollsmohicancastle.com/wp-content/uploads/2024/05/2022_12_03-1.jpg',
   },
@@ -58,25 +60,6 @@ const hotels = [
     url: 'http://www.mountvernongrand.com',
     badge: null,
     img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&q=80&auto=format&fit=crop',
-  },
-];
-
-const faqs = [
-  {
-    q: `Where exactly is ${venue}?`,
-    a: `${venue} is located at 561 Township Road 3352, Loudonville, OH 44842 — in the heart of Ohio's scenic Mohican country, about 75 miles northeast of Columbus and 90 miles south of Cleveland. It is about a 3 hour drive from our home in Covington.`,
-  },
-  {
-    q: 'Is there parking at the venue?',
-    a: 'Yes! Landoll\'s Mohican Castle has ample free parking on site. Details will be included in your invitation. If you prefer not to drive, we recommend coordinating rides with fellow guests.',
-  },
-  {
-    q: 'When should I book my hotel?',
-    a: 'As soon as possible! We have reserved a block of 31 suites at the castle for our wedding night, and these are expected to fill up quickly. If you\'re interested in staying on-site, we recommend booking your suite at the castle as soon as you receive your invitation. If we run out of suites, there are nearby options available as well!',
-  },
-  {
-    q: 'Can I bring my pet?',
-    a: 'We kindly ask that guests not bring pets to the castle property. Our dog Mister will be staying with us at the castle, and he is dog-reactive — having other animals on the property could cause him stress. If you need pet-friendly accommodation, the Loudonville area has a number of B&Bs, cabins, and vacation rentals that welcome pets. We appreciate your understanding!',
   },
 ];
 
@@ -151,7 +134,11 @@ export default function Travel() {
                     {h.price && <span>👥 {h.price}</span>}
                     {h.phone && <span>📞 {h.phone}</span>}
                   </div>
-                  <a href={h.url} target="_blank" rel="noreferrer" className="btn btn-soft hotel-card__btn">
+                  <a
+                    href={h.url}
+                    {...(h.url.startsWith('#') ? {} : { target: '_blank', rel: 'noreferrer' })}
+                    className="btn btn-soft hotel-card__btn"
+                  >
                     View Details
                   </a>
                 </div>
@@ -162,7 +149,7 @@ export default function Travel() {
       </section>
 
       {/* Booking & Check-In */}
-      <section className="section">
+      <section className="section" id="booking-checkin">
         <div className="container">
           <div className="section-header">
             <p className="cinzel">Need to Know</p>
@@ -215,12 +202,7 @@ export default function Travel() {
             <p className="cinzel">Common Questions</p>
             <h2>Travel FAQs</h2>
           </div>
-          {faqs.map(faq => (
-            <div key={faq.q} className="travel-faq card">
-              <h4>{faq.q}</h4>
-              <p>{faq.a}</p>
-            </div>
-          ))}
+          <FaqAccordion items={travelFaqs} />
         </div>
       </section>
     </main>

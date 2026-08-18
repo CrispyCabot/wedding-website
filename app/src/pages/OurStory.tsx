@@ -132,8 +132,7 @@ export default function OurStory() {
               lineHeight: 1.8,
             }}
           >
-            "Some love stories begin with a single moment. A look, a laugh, a
-            hello. And from that spark, an entire world unfolds."
+            "That's what she said."
           </p>
         </div>
       </section>

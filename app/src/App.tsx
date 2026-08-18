@@ -11,6 +11,7 @@ import OurStory from './pages/OurStory'
 import Photos from './pages/Photos'
 import Travel from './pages/Travel'
 import QA from './pages/QA'
+import DayOfSchedule from './pages/DayOfSchedule'
 import Registry from './pages/Registry'
 import WeddingParty from './pages/WeddingParty'
 import './App.css'
@@ -33,6 +34,7 @@ function Layout() {
         <Route path="/photos"        element={<Photos />} />
         <Route path="/travel"        element={<Travel />} />
         <Route path="/qa"            element={<QA />} />
+        <Route path="/day-of-schedule" element={<DayOfSchedule />} />
         <Route path="/registry"      element={<Registry />} />
         <Route path="/wedding-party" element={<WeddingParty />} />
         {/* Catch-all → home */}
