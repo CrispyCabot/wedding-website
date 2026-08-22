@@ -18,9 +18,9 @@ const categories: { label: string; icon: string; items: FaqItem[] }[] = [
         a: (
           <>
             We don't have an exact start time locked in just yet. Once we do, we'll
-            post a recommended arrival time on our{' '}
-            <Link to="/travel">Travel page</Link> — plan to arrive at or close to
-            that time so you don't miss a moment.
+            post it — along with a recommended arrival time — on our{' '}
+            <Link to="/day-of-schedule">Day of Schedule</Link> page, so plan to arrive
+            at or close to that time so you don't miss a moment.
           </>
         ),
       },

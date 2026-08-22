@@ -163,6 +163,13 @@ export default function Travel() {
               <p>
                 We've reserved a block of <strong>31 suites</strong> for our wedding night. These <strong>cannot be booked online</strong> — to reserve your room, call the front desk and provide our last name (<strong>Bridewell / Sheets</strong>) along with the wedding date (<strong>September 11, 2027</strong>).
               </p>
+              <p style={{ marginTop: 12 }}>
+                Want to see what's available first? Browse the{' '}
+                <a href="https://landollsmohicancastle.com/suites/" target="_blank" rel="noreferrer">
+                  full list of suites, cottages, and villas
+                </a>{' '}
+                to get a feel for the styles and price tiers, then call and mention the one you'd like.
+              </p>
               <ul className="booking-list">
                 <li><strong>Front desk hours:</strong> 8:30 am – 10:00 pm daily</li>
                 <li>Busiest times are 10–11 am (check-out) and 3–4:30 pm (check-in) — calling outside these windows will get you faster service</li>

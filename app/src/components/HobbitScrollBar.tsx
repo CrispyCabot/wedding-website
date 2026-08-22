@@ -94,43 +94,29 @@ function GroomSVG() {
   )
 }
 
-function EyeOfSauronSVG() {
+/* Small fairy-tale castle silhouette — the couple's destination */
+function CastleSVG() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 56 68"
-      className="eye-sauron"
+      viewBox="0 0 48 58"
+      className="castle-figure"
     >
-      <ellipse className="eye-glow-outer" cx="28" cy="30" rx="26" ry="28" fill="#FF3300" />
+      {/* Left turret */}
+      <rect x="2" y="26" width="10" height="32" />
+      <path d="M2 26 L7 16 L12 26 Z" />
 
-      <path className="flame-layer-1"
-            d="M6 62 Q11 44 18 52 Q22 30 28 46 Q34 30 38 52 Q45 44 50 62 Z"
-            fill="#6A0000" />
-      <path className="flame-layer-2"
-            d="M10 62 Q15 48 20 54 Q24 36 28 50 Q32 36 36 54 Q41 48 46 62 Z"
-            fill="#CC2200" />
-      <path className="flame-layer-3"
-            d="M14 62 Q18 52 22 56 Q25 44 28 52 Q31 44 34 56 Q38 52 42 62 Z"
-            fill="#FF5500" />
-      <path className="flame-layer-4"
-            d="M19 62 Q22 56 25 58 Q26 50 28 55 Q30 50 31 58 Q34 56 37 62 Z"
-            fill="#FF9900" />
+      {/* Right turret */}
+      <rect x="36" y="26" width="10" height="32" />
+      <path d="M36 26 L41 16 L46 26 Z" />
 
-      <path d="M22 62 L18 68 L38 68 L34 62 Z" fill="#080200" />
-      <rect x="25" y="46" width="6" height="20" fill="#080200" />
+      {/* Center keep */}
+      <rect x="14" y="18" width="20" height="40" />
+      <path d="M14 18 L24 6 L34 18 Z" />
 
-      <path d="M3 30 Q12 6 28 3 Q44 6 53 30 Q44 54 28 57 Q12 54 3 30 Z" fill="#200800" />
-      <path d="M7 30 Q28 14 49 30 Q28 46 7 30 Z" fill="#880000" />
-      <path d="M12 30 Q28 20 44 30 Q28 40 12 30 Z" fill="#DD4400" />
-      <path d="M16 30 Q28 23 40 30 Q28 37 16 30 Z" fill="#FF6600" />
-
-      <path d="M25 19 Q28 16 31 19 L31 41 Q28 44 25 41 Z" fill="#000000" />
-      <path d="M26 22 Q28 20 30 22 L30 38 Q28 40 26 38 Z" fill="#1A0000" />
-
-      <ellipse cx="24" cy="26" rx="2.5" ry="3" fill="#FF8800" opacity="0.3" />
-      <path d="M7 30 Q28 14 49 30" stroke="#FF4400" strokeWidth="1.2" fill="none" opacity="0.35" />
-      <path d="M3 30 Q12 6 28 3 Q44 6 53 30" stroke="#3A1000" strokeWidth="2.5" fill="none" />
-      <path d="M3 30 Q12 54 28 57 Q44 54 53 30" stroke="#3A1000" strokeWidth="2.5" fill="none" />
+      {/* Flag */}
+      <line x1="24" y1="6" x2="24" y2="0" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M24 0 L30 3 L24 6 Z" />
     </svg>
   )
 }
@@ -164,20 +150,6 @@ export default function HobbitScrollBar() {
       {/* The road line */}
       <div className="hobbit-road-line" />
 
-      {/* Milestone markers */}
-      <div className="milestone" style={{ left: '18%' }}>
-        <span className="milestone-label">The Shire</span>
-        <div className="milestone-dot" />
-      </div>
-      <div className="milestone" style={{ left: '42%' }}>
-        <span className="milestone-label">Rivendell</span>
-        <div className="milestone-dot" />
-      </div>
-      <div className="milestone" style={{ left: '68%' }}>
-        <span className="milestone-label">Rohan</span>
-        <div className="milestone-dot" />
-      </div>
-
       {/* The couple walking together */}
       <div
         className={`hobbit-walker ${walking ? 'is-walking' : 'is-idle'}`}
@@ -187,10 +159,9 @@ export default function HobbitScrollBar() {
         <BrideSVG />
       </div>
 
-      {/* Eye of Sauron */}
-      <div className="eye-container">
-        <EyeOfSauronSVG />
-        <span className="eye-label">Mordor</span>
+      {/* The castle, waiting at the end of the road */}
+      <div className="castle-container">
+        <CastleSVG />
       </div>
     </div>
   )
