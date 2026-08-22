@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './HobbitScrollBar.css'
 
 /* Side-profile silhouette of a bride: veil, A-line dress, bouquet */
@@ -124,6 +124,22 @@ function CastleSVG() {
 export default function HobbitScrollBar() {
   const [scrollPct, setScrollPct] = useState(0)
   const [walking, setWalking] = useState(false)
+  const [reserve, setReserve] = useState(140)
+  const walkerRef = useRef<HTMLDivElement>(null)
+  const castleRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    function updateReserve() {
+      const walkerWidth = walkerRef.current?.offsetWidth ?? 0
+      const castleWidth = castleRef.current?.offsetWidth ?? 0
+      // Gap between the walker's trailing edge and the castle, plus its 4px right inset.
+      setReserve(walkerWidth + castleWidth + 16)
+    }
+
+    updateReserve()
+    window.addEventListener('resize', updateReserve)
+    return () => window.removeEventListener('resize', updateReserve)
+  }, [])
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>
@@ -152,15 +168,16 @@ export default function HobbitScrollBar() {
 
       {/* The couple walking together */}
       <div
+        ref={walkerRef}
         className={`hobbit-walker ${walking ? 'is-walking' : 'is-idle'}`}
-        style={{ left: `calc(4px + ${scrollPct} * (100% - 140px))` }}
+        style={{ left: `calc(4px + ${scrollPct} * (100% - ${reserve}px))` }}
       >
         <GroomSVG />
         <BrideSVG />
       </div>
 
       {/* The castle, waiting at the end of the road */}
-      <div className="castle-container">
+      <div ref={castleRef} className="castle-container">
         <CastleSVG />
       </div>
     </div>
