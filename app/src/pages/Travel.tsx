@@ -1,4 +1,5 @@
 import { theme } from '../config/theme';
+import { mediaPath } from '../config/media';
 import FaqAccordion from '../components/FaqAccordion';
 import { travelFaqs } from '../data/travelFaqs';
 import './Travel.css';
@@ -15,7 +16,7 @@ const hotels = [
     phone: null as string | null,
     url: '#booking-checkin',
     badge: '⭐ Recommended',
-    img: 'https://landollsmohicancastle.com/wp-content/uploads/2024/05/2022_12_03-1.jpg',
+    img: mediaPath('venue/castle.jpg'),
   },
   {
     name: 'Serenity Hill',
@@ -26,7 +27,7 @@ const hotels = [
     phone: null as string | null,
     url: 'https://www.airbnb.com/rooms/44341387',
     badge: null,
-    img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&q=80&auto=format&fit=crop',
+    img: mediaPath('venue/serenity-hill.jpg'),
   },
   {
     name: 'The Hemlock Inn',
@@ -37,7 +38,7 @@ const hotels = [
     phone: '330.227.2628',
     url: 'https://www.thehemlockinn.com/',
     badge: null,
-    img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&q=80&auto=format&fit=crop',
+    img: mediaPath('venue/hemlock-inn.webp'),
   },
   {
     name: 'Mohican State Park Lodge',
@@ -48,7 +49,7 @@ const hotels = [
     phone: '419.938.5411',
     url: 'https://www.mohicanlodge.com',
     badge: null,
-    img: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80&auto=format&fit=crop',
+    img: mediaPath('venue/mohican-lodge.jpg'),
   },
   {
     name: 'The Mount Vernon Grand Hotel',
@@ -59,7 +60,7 @@ const hotels = [
     phone: '844.700.1717',
     url: 'http://www.mountvernongrand.com',
     badge: null,
-    img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&q=80&auto=format&fit=crop',
+    img: mediaPath('venue/mount-vernon-grand.jpg'),
   },
 ];
 
@@ -95,7 +96,7 @@ export default function Travel() {
           </div>
           <div className="travel-intro__map card">
             <img
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&auto=format&fit=crop"
+              src={mediaPath('venue/castle.jpg')}
               alt="Castle venue exterior"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               loading="lazy"

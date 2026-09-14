@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { theme } from '../config/theme';
+import { mediaPath } from '../config/media';
 import ParticleCanvas from '../components/ParticleCanvas';
 import './Home.css';
 
@@ -106,7 +107,7 @@ export default function Home() {
         <div className="container venue-inner">
           <div className="venue-img-wrap">
             <img
-              src="https://landollsmohicancastle.com/wp-content/uploads/2024/05/2022_12_03-1.jpg"
+              src={mediaPath('venue/castle.jpg')}
               alt="Elegant castle venue at dusk"
               className="venue-img"
               loading="lazy"

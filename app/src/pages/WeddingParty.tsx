@@ -1,3 +1,4 @@
+import { show_wedding_party } from '../config/flags';
 import './WeddingParty.css';
 
 interface PartyMember {
@@ -79,6 +80,20 @@ const others = [
   { role: 'Mother of the Groom', name: 'Placeholder Name', desc: "[Placeholder] Share a loving note about the groom's family." },
 ];
 
+function ComingSoon({ message }: { message: string }) {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <span className="placeholder-badge" style={{ marginBottom: 20, display: 'inline-flex' }}>
+        ✏️ Coming Soon
+      </span>
+      <div className="ornament">✦</div>
+      <p style={{ marginTop: 16, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto' }}>
+        {message}
+      </p>
+    </div>
+  );
+}
+
 function MemberCard({ member, side }: { member: PartyMember; side: 'bride' | 'groom' }) {
   return (
     <div className={`member-card card member-card--${side} fade-up`}>
@@ -122,9 +137,13 @@ export default function WeddingParty() {
             <p className="cinzel">Maddie's Side</p>
             <h2>Bridesmaids</h2>
           </div>
-          <div className="party-grid">
-            {bridalParty.map(m => <MemberCard key={m.role + m.name} member={m} side="bride" />)}
-          </div>
+          {show_wedding_party ? (
+            <div className="party-grid">
+              {bridalParty.map(m => <MemberCard key={m.role + m.name} member={m} side="bride" />)}
+            </div>
+          ) : (
+            <ComingSoon message="We can't wait to introduce the incredible women standing by Maddie's side. Check back soon!" />
+          )}
         </div>
       </section>
 
@@ -135,9 +154,13 @@ export default function WeddingParty() {
             <p className="cinzel">Chris's Side</p>
             <h2>Groomsmen</h2>
           </div>
-          <div className="party-grid">
-            {groomsParty.map(m => <MemberCard key={m.role + m.name} member={m} side="groom" />)}
-          </div>
+          {show_wedding_party ? (
+            <div className="party-grid">
+              {groomsParty.map(m => <MemberCard key={m.role + m.name} member={m} side="groom" />)}
+            </div>
+          ) : (
+            <ComingSoon message="We can't wait to introduce the incredible men standing by Chris's side. Check back soon!" />
+          )}
         </div>
       </section>
 
@@ -148,15 +171,19 @@ export default function WeddingParty() {
             <p className="cinzel">Also Celebrating</p>
             <h2>Special Roles</h2>
           </div>
-          <div className="others-grid">
-            {others.map(o => (
-              <div key={o.role} className="others-card card">
-                <p className="cinzel others-card__role">{o.role}</p>
-                <h3 className="others-card__name">{o.name}</h3>
-                <p className="others-card__desc">{o.desc}</p>
-              </div>
-            ))}
-          </div>
+          {show_wedding_party ? (
+            <div className="others-grid">
+              {others.map(o => (
+                <div key={o.role} className="others-card card">
+                  <p className="cinzel others-card__role">{o.role}</p>
+                  <h3 className="others-card__name">{o.name}</h3>
+                  <p className="others-card__desc">{o.desc}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <ComingSoon message="Officiant, flower girl, ring bearer, and the parents who raised us — introductions coming soon." />
+          )}
         </div>
       </section>
     </main>

@@ -1,4 +1,5 @@
 import { theme } from '../config/theme';
+import { show_registry } from '../config/flags';
 import './Registry.css';
 
 const { partner1, partner2, registryUrl } = theme.wedding;
@@ -69,34 +70,46 @@ export default function Registry() {
             <h2>Where We're Registered</h2>
           </div>
 
-          <div className="registry-grid">
-            {registries.map(reg => (
-              <div key={reg.name} className="registry-card card fade-up">
-                <div className="registry-card__icon-wrap">
-                  <span className="registry-card__icon">{reg.icon}</span>
+          {show_registry ? (
+            <div className="registry-grid">
+              {registries.map(reg => (
+                <div key={reg.name} className="registry-card card fade-up">
+                  <div className="registry-card__icon-wrap">
+                    <span className="registry-card__icon">{reg.icon}</span>
+                  </div>
+                  <div className="registry-card__body">
+                    <p className="cinzel registry-card__name">{reg.name}</p>
+                    <h3>{reg.store}</h3>
+                    <p>{reg.desc}</p>
+                    {reg.placeholder ? (
+                      <div className="registry-card__link-wrap">
+                        <span className="placeholder-badge">Link Coming Soon</span>
+                      </div>
+                    ) : (
+                      <a
+                        href={reg.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn-primary registry-card__btn"
+                      >
+                        View Registry →
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <div className="registry-card__body">
-                  <p className="cinzel registry-card__name">{reg.name}</p>
-                  <h3>{reg.store}</h3>
-                  <p>{reg.desc}</p>
-                  {reg.placeholder ? (
-                    <div className="registry-card__link-wrap">
-                      <span className="placeholder-badge">Link Coming Soon</span>
-                    </div>
-                  ) : (
-                    <a
-                      href={reg.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-primary registry-card__btn"
-                    >
-                      View Registry →
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
+              <span className="placeholder-badge" style={{ marginBottom: 20, display: 'inline-flex' }}>
+                ✏️ Coming Soon
+              </span>
+              <div className="ornament">✦</div>
+              <p style={{ marginTop: 16, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto' }}>
+                We're finalizing our registries and will share the links here soon. Thank you for your patience!
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
