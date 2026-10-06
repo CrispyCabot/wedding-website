@@ -13,7 +13,7 @@ const hotels = [
     desc: "Stay right on the property — we've reserved a block of 31 suites for our wedding night, including charming castle rooms and romantic woodland cottages. This is the most magical option! See below for details on booking a room.",
     price: 'Varies by room type',
     distance: 'On-site',
-    phone: null as string | null,
+    phone: '419.994.3427',
     url: '#booking-checkin',
     badge: '⭐ Recommended',
     img: mediaPath('venue/castle.jpg'),
@@ -162,7 +162,7 @@ export default function Travel() {
               <span className="booking-card__icon">📞</span>
               <h3>How to Book a Suite</h3>
               <p>
-                We've reserved a block of <strong>31 suites</strong> for our wedding night. These <strong>cannot be booked online</strong> — to reserve your room, call the front desk and provide our last name (<strong>Bridewell / Sheets</strong>) along with the wedding date (<strong>September 11, 2027</strong>).
+                We've reserved a block of <strong>31 suites</strong> for our wedding night. These <strong>cannot be booked online</strong> — to reserve your room, call the front desk at <a href="tel:+14199943427"><strong>419-994-3427</strong></a> and provide our last name (<strong>Bridewell / Sheets</strong>) along with the wedding date (<strong>September 11, 2027</strong>).
               </p>
               <p style={{ marginTop: 12 }}>
                 Want to see what's available first? Browse the{' '}
