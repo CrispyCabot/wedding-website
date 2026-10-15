@@ -2,6 +2,16 @@
 
 > Reference documentation for AI-assisted development on this project.
 
+> ## ⚠️ HIGH PRIORITY — THIS SITE IS LIVE
+>
+> The website is **live in production** (password gate removed). Pushes to
+> `main` auto-deploy to production via GitHub Actions.
+>
+> - **Prioritize testing locally** (`npm run typecheck`, `npm run build`, dev
+>   server) before proposing any change for release.
+> - **Never commit or push anything directly to `main` without the user's
+>   explicit approval.** Work on a branch and ask first.
+
 ---
 
 ## Project Overview
