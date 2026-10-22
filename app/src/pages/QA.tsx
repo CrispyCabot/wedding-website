@@ -45,7 +45,7 @@ const categories: { label: string; icon: string; items: FaqItem[] }[] = [
           </>
         ),
       },
-      { q: 'What is the dress code?', a: `The dress code is **Black Tie Optional** — we'd love for guests to get a little fancy! Think cocktail attire or formal wear. Ladies, please keep in mind the outdoor setting when choosing footwear (block heels or flats are recommended).` },
+      { q: 'What is the dress code?', a: `We're still working on the dress code and don't have it finalized yet. Please check back later — we'll update this page as soon as we know!` },
       { q: 'Will there be a vegetarian / dietary option?', a: `Yes! Maddie's a vegetarian, so of course we've got you covered. Please indicate any dietary restrictions or allergies when you RSVP and we'll have vegetarian, vegan, and gluten-free options available.` },
       { q: 'Is the reception kid-friendly?', a: `Yes, kids are welcome! Just keep in mind there will be an open bar at the reception, so plan accordingly. One nice perk of staying on-site at the castle: you can put the little ones to bed and come right back down to keep celebrating.` },
     ],
