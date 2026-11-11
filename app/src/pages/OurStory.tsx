@@ -44,7 +44,7 @@ const timeline: Milestone[] = [
     year: "March 2023",
     title: "How We Met",
     icon: "✨",
-    text: `We matched on Tinder in March of 2023 and bonded almost immediately over margaritas. Our first date was at Lalo on March 11th. Naturally, we were both far too nervous to actually order one. Not long after came the first of many candlelight concerts, a classic rock set that landed right where our tastes overlap, with ${p2First}'s rock and heavier music meeting ${p1First}'s love of strings.`,
+    text: `We matched on Tinder in March of 2023 and bonded almost immediately over margaritas. Our first date was at Taqueria Mercado on March 11th. Naturally, we were both far too nervous to actually order one. Not long after came the first of many candlelight concerts, a classic rock set that landed right where our tastes overlap, with ${p2First}'s rock and heavier music meeting ${p1First}'s love of strings.`,
     img: storyPhoto("how-we-met.jpg"),
     imgAlt: "The two of us early on",
     imgHeight: 380,
