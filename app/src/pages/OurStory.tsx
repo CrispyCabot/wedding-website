@@ -63,7 +63,7 @@ const timeline: Milestone[] = [
     year: "Ever Since",
     title: "Don't Forget Earplugs",
     icon: "🎸",
-    text: `Somewhere along the way, live music became our thing. It started with Louis Tomlinson and never really stopped: multiple 5 Seconds of Summer shows, Sonic Temple, Lynyrd Skynyrd, The Maine, grandson, and more nights than we can reasonably count. The list keeps growing, and we have no plans to stop it.`,
+    text: `Somewhere along the way, live music became our thing. It started with Louis Tomlinson and never really stopped: multiple 5 Seconds of Summer shows, Oliva Rodrigo, Sonic Temple, Lynyrd Skynyrd, The Maine, grandson, and more nights than we can reasonably count. The list keeps growing, and we have no plans to stop it.`,
     img: storyPhoto("concerts.jpg"),
     imgAlt: "The two of us at a concert",
     imgHeight: 400,
